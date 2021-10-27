@@ -4,10 +4,7 @@ title: Practical 7
 permalink: /practical7/
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-                      fig.path = ".")
-```
+
 
 # Objectives
 
@@ -73,7 +70,8 @@ Type in the newly created R script (either with a text editor or with RStudio)
 the following two lines to read the CSV file downloaded in the previous section.
 The first line is a comment. Lines starting with the `#` symbol are comments in R.
 
-```{r}
+
+```r
 ## read COVID19 data
 dat <- read.csv("catalunya_setmanal.csv", sep=";", stringsAsFactors=TRUE)
 ```
@@ -103,8 +101,33 @@ geriatric residences.
 
 These are the first 6 rows of the previously loaded CSV file:
 
-```{r}
+
+```r
 head(dat)
+```
+
+```
+##         NOM      CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
+## 1 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         Si             NA
+## 2 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         No        594.686
+## 3 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         --             NA
+## 4 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         No        619.898
+## 5 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         --             NA
+## 6 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         Si             NA
+##   R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCR_TAR
+## 1             NA 2841.0884            1420.5442             900    16604.584
+## 2       0.867578  685.4556             301.7109           23042     3113.298
+## 3             NA    0.0000               0.0000             533        0.000
+## 4       0.886494  699.2697             310.1696           23688     3157.961
+## 5             NA    0.0000               0.0000             547        0.000
+## 6             NA 2883.7047            1474.2092             934    16793.989
+##      PCR   TAR PERC_PCR_TAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
+## 1   8445  2075                10.4716             112                5    151
+## 2 175816 61950                10.6273            1528              293    319
+## 3   3827   177                 7.0064              67               14      0
+## 4 179829 61348                10.7125            1566              294    321
+## 5   3846   166                 7.0666              71               14      0
+## 6   8552  2088                10.6121             119                5    143
 ```
 
 It has two columns with date information (`DATA_INI` and `DATA_FI`), but which
@@ -115,7 +138,8 @@ facilitates manipulating them for analysis purposes.
 For instance, to two transform the two columns containing date data we should
 use the function `as.Date()` as follows:
 
-```{r}
+
+```r
 startdate <- as.Date(dat$DATA_INI)
 enddate <- as.Date(dat$DATA_FI)
 ```
@@ -123,10 +147,30 @@ enddate <- as.Date(dat$DATA_FI)
 While R displays these objects as vectors of character strings, they do belong to
 a different class of objects, the class _Date_.
 
-```{r}
+
+```r
 head(startdate)
+```
+
+```
+## [1] "2020-11-02" "2020-11-02" "2020-11-02" "2020-11-01" "2020-11-01"
+## [6] "2020-11-01"
+```
+
+```r
 class(startdate)
+```
+
+```
+## [1] "Date"
+```
+
+```r
 class(enddate)
+```
+
+```
+## [1] "Date"
 ```
 
 

@@ -12,7 +12,7 @@
 <p>To do this practical you need an installation of R and RStudio. You can find the instructions in the <a href="/setup#r-and-rstudio">setup</a> link on how to install R and RStudio in your system. For a smooth development of this practical, it is strongly recommended that you follow and finish the previous <a href="/seminar4/">seminar 4</a> on how to get started with R and RStudio.</p>
 <p>We will download some COVID19 data to illustrate the use of R and RStudio. Please follow the next two steps:</p>
 <ol type="1">
-<li>Go to the Catalan Health Departament COVID19 data portal at <a href="https://dadescovid.cat" class="uri">https://dadescovid.cat</a> and switch the language to “ENGLISH” using the pull-down menu on the top-right corner of the page.</li>
+<li>Go to the Catalan Health Departament COVID19 data portal at <a href="https://dadescovid.cat">https://dadescovid.cat</a> and switch the language to “ENGLISH” using the pull-down menu on the top-right corner of the page.</li>
 <li>Follow the downloads link and on the next page click and download the file corresponding to the “7 DAY AGGREGATION” for “CATALUNYA”. Make sure you know exactly where in your filesystem this file has been downloaded. <strong>Tip:</strong> some browsers automatically download files into a folder called “Downloads” or under a name corresponding to the translation of “Downloads” to the default language of your operating system.</li>
 <li>Make a directory in your filesystem, for instance at your <em>home</em> directory, called <code>practical9</code> and copy in it the downloaded file.</li>
 <li>Since the downloaded file is a ZIP file, uncompress as you did in <a href="/practical1/">practical 1</a> so that you finally have a file called <code>catalunya_setmanal.csv</code> in the directory <code>practical9</code>.</li>
@@ -23,41 +23,48 @@
 <p>There are two main ways to create an R script: (1) openining a new file with a text editor and saving it with filename that includes the <code>.R</code> extension, or (2) if we are working with RStudio, then we click on the <code>File</code> menu and select the options <code>New File</code> -&gt; <code>R Script</code>. When we do that we should be getting the RStudio window splitted in four panes, the default three ones and one additional one for the newly created R script, as shown in the captured window below.</p>
 <p><img src="RStudioNewScript.png" /></p>
 <p>Type in the newly created R script (either with a text editor or with RStudio) the following two lines to read the CSV file downloaded in the previous section. The first line is a comment. Lines starting with the <code>#</code> symbol are comments in R.</p>
-<pre><code>## read COVID19 data
-dat &lt;- read.csv(&quot;catalunya_setmanal.csv&quot;, sep=&quot;;&quot;, stringsAsFactors=TRUE)</code></pre>
-<p>Now save the R script in the directory <code>practical9</code> under the filename <code>covid19analysis.R</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">## read COVID19 data</span></a>
+<a class="sourceLine" id="cb1-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;catalunya_setmanal.csv&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;;&quot;</span>, <span class="dt">stringsAsFactors=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Now save the R script in the directory <code>practical7</code> under the filename <code>covid19analysis.R</code>.</p>
 <p>To execute a specific line of an R script in RStudio you should move the cursor to that line in the pane with the script file and press the key combination <code>Ctrl+Enter</code>. Alternatively, you can also copy and paste the line from the script to the R shell, specially if you are not working with RStudio.</p>
 <p>The previous line may produce an error if the current working directory of R is not pointing to the directory where the file <code>catalunya_setmanal.csv</code> is; see previous <a href="/seminar4/">seminar 4</a> if you need to find out how to change the working directory in R and RStudio. In general, changing the working directory should be always performed in the R shell and <strong>NEVER</strong> include the instruction that changes the working directory in an R script. The reason is because you or somebody else may want to run that script in a different computer where the directory with the data may be called differently.</p>
 <p>Add to the script <code>covid19analysis.R</code> the necessary code to obtain a new <code>data.frame</code> object including only data from the general population, i.e., excluding data from geriatric residences.</p>
 <h1 id="date-data-management">Date-data management</h1>
 <p>These are the first 6 rows of the previously loaded CSV file:</p>
-<pre><code>&gt; head(dat)
-        NOM      CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
-1 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         --             NA
-2 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         Si             NA
-3 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         No        611.099
-4 CATALUNYA CATALUNYA 2020-10-31 2020-11-06         --             NA
-5 CATALUNYA CATALUNYA 2020-10-31 2020-11-06         Si             NA
-6 CATALUNYA CATALUNYA 2020-10-31 2020-11-06         No        641.672
-  R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCR_TAR
-1             NA    0.0000               0.0000             529        0.000
-2             NA 2798.2745            1396.7672             884    16680.624
-3       0.880132  694.3272             306.0293           23372     3137.612
-4             NA    0.0000               0.0000             546        0.000
-5             NA 2844.0961            1439.4286             911    17522.792
-6       0.906287  708.0233             317.5911           24255     3213.137
-     PCR   TAR PERC_PCR_TAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
-1   3582   166                 7.3237              68               15      0
-2   8469  2088                10.4550             114                5    139
-3 178471 61154                10.7314            1512              295    312
-4   3890   164                 7.0030              71               14      0
-5   8937  2153                10.1535             114                6    153
-6 184715 60678                10.8609            1578              279    315</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">head</span>(dat)</a></code></pre></div>
+<pre><code>##         NOM      CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
+## 1 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         Si             NA
+## 2 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         No        594.686
+## 3 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         --             NA
+## 4 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         No        619.898
+## 5 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         --             NA
+## 6 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         Si             NA
+##   R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCR_TAR
+## 1             NA 2841.0884            1420.5442             900    16604.584
+## 2       0.867578  685.4556             301.7109           23042     3113.298
+## 3             NA    0.0000               0.0000             533        0.000
+## 4       0.886494  699.2697             310.1696           23688     3157.961
+## 5             NA    0.0000               0.0000             547        0.000
+## 6             NA 2883.7047            1474.2092             934    16793.989
+##      PCR   TAR PERC_PCR_TAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
+## 1   8445  2075                10.4716             112                5    151
+## 2 175816 61950                10.6273            1528              293    319
+## 3   3827   177                 7.0064              67               14      0
+## 4 179829 61348                10.7125            1566              294    321
+## 5   3846   166                 7.0666              71               14      0
+## 6   8552  2088                10.6121             119                5    143</code></pre>
 <p>It has two columns with date information (<code>DATA_INI</code> and <code>DATA_FI</code>), but which are stored as string characters (more specifically <em>factors</em>). However, R provides a way to store dates as such and this has the advantage that facilitates manipulating them for analysis purposes.</p>
 <p>For instance, to two transform the two columns containing date data we should use the function <code>as.Date()</code> as follows:</p>
-<pre><code>&gt; startdate &lt;- as.Date(dat$DATA_INI)
-&gt; enddate &lt;- as.Date(dat$DATA_FI)</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">startdate &lt;-<span class="st"> </span><span class="kw">as.Date</span>(dat<span class="op">$</span>DATA_INI)</a>
+<a class="sourceLine" id="cb4-2" title="2">enddate &lt;-<span class="st"> </span><span class="kw">as.Date</span>(dat<span class="op">$</span>DATA_FI)</a></code></pre></div>
 <p>While R displays these objects as vectors of character strings, they do belong to a different class of objects, the class <em>Date</em>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">head</span>(startdate)</a></code></pre></div>
+<pre><code>## [1] &quot;2020-11-02&quot; &quot;2020-11-02&quot; &quot;2020-11-02&quot; &quot;2020-11-01&quot; &quot;2020-11-01&quot;
+## [6] &quot;2020-11-01&quot;</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">class</span>(startdate)</a></code></pre></div>
+<pre><code>## [1] &quot;Date&quot;</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">class</span>(enddate)</a></code></pre></div>
+<pre><code>## [1] &quot;Date&quot;</code></pre>
 <pre><code>&gt; head(startdate)
 [1] &quot;2020-11-01&quot; &quot;2020-11-01&quot; &quot;2020-11-01&quot; &quot;2020-10-31&quot; &quot;2020-10-31&quot; &quot;2020-10-31&quot;
 &gt; class(startdate)
