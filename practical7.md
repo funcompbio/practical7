@@ -66,8 +66,8 @@ RStudio) the following two lines to read the CSV file downloaded in the
 previous section. The first line is a comment. Lines starting with the
 `#` symbol are comments in R.
 
-    ## read COVID19 data
-    dat <- read.csv("catalunya_setmanal.csv", sep=";", stringsAsFactors=TRUE)
+    > ## read COVID19 data
+    > dat <- read.csv("catalunya_setmanal.csv", sep=";", stringsAsFactors=TRUE)
 
 Now save the R script in the directory `practical7` under the filename
 `covid19analysis.R`.
@@ -96,29 +96,29 @@ i.e., excluding data from geriatric residences.
 
 These are the first 6 rows of the previously loaded CSV file:
 
-    head(dat)
+    > head(dat)
 
-    ##         NOM      CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
-    ## 1 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         Si             NA
-    ## 2 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         No        594.686
-    ## 3 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         --             NA
-    ## 4 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         No        619.898
-    ## 5 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         --             NA
-    ## 6 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         Si             NA
-    ##   R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCR_TAR
-    ## 1             NA 2841.0884            1420.5442             900    16604.584
-    ## 2       0.867578  685.4556             301.7109           23042     3113.298
-    ## 3             NA    0.0000               0.0000             533        0.000
-    ## 4       0.886494  699.2697             310.1696           23688     3157.961
-    ## 5             NA    0.0000               0.0000             547        0.000
-    ## 6             NA 2883.7047            1474.2092             934    16793.989
-    ##      PCR   TAR PERC_PCR_TAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
-    ## 1   8445  2075                10.4716             112                5    151
-    ## 2 175816 61950                10.6273            1528              293    319
-    ## 3   3827   177                 7.0064              67               14      0
-    ## 4 179829 61348                10.7125            1566              294    321
-    ## 5   3846   166                 7.0666              71               14      0
-    ## 6   8552  2088                10.6121             119                5    143
+            NOM      CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
+    1 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         Si             NA
+    2 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         No        594.686
+    3 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         --             NA
+    4 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         No        619.898
+    5 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         --             NA
+    6 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         Si             NA
+      R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCR_TAR
+    1             NA 2841.0884            1420.5442             900    16604.584
+    2       0.867578  685.4556             301.7109           23042     3113.298
+    3             NA    0.0000               0.0000             533        0.000
+    4       0.886494  699.2697             310.1696           23688     3157.961
+    5             NA    0.0000               0.0000             547        0.000
+    6             NA 2883.7047            1474.2092             934    16793.989
+         PCR   TAR PERC_PCR_TAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
+    1   8445  2075                10.4716             112                5    151
+    2 175816 61950                10.6273            1528              293    319
+    3   3827   177                 7.0064              67               14      0
+    4 179829 61348                10.7125            1566              294    321
+    5   3846   166                 7.0666              71               14      0
+    6   8552  2088                10.6121             119                5    143
 
 It has two columns with date information (`DATA_INI` and `DATA_FI`), but
 which are stored as string characters (more specifically *factors*).
@@ -128,38 +128,35 @@ advantage that facilitates manipulating them for analysis purposes.
 For instance, to two transform the two columns containing date data we
 should use the function `as.Date()` as follows:
 
-    startdate <- as.Date(dat$DATA_INI)
-    enddate <- as.Date(dat$DATA_FI)
+    > startdate <- as.Date(dat$DATA_INI)
+    > enddate <- as.Date(dat$DATA_FI)
 
 While R displays these objects as vectors of character strings, they do
 belong to a different class of objects, the class *Date*.
 
-    head(startdate)
-
-    ## [1] "2020-11-02" "2020-11-02" "2020-11-02" "2020-11-01" "2020-11-01"
-    ## [6] "2020-11-01"
-
-    class(startdate)
-
-    ## [1] "Date"
-
-    class(enddate)
-
-    ## [1] "Date"
-
     > head(startdate)
-    [1] "2020-11-01" "2020-11-01" "2020-11-01" "2020-10-31" "2020-10-31" "2020-10-31"
+
+    [1] "2020-11-02" "2020-11-02" "2020-11-02" "2020-11-01" "2020-11-01"
+    [6] "2020-11-01"
+
     > class(startdate)
+
     [1] "Date"
+
     > head(enddate)
-    [1] "2020-11-07" "2020-11-07" "2020-11-07" "2020-11-06" "2020-11-06" "2020-11-06"
+
+    [1] "2020-11-08" "2020-11-08" "2020-11-08" "2020-11-07" "2020-11-07"
+    [6] "2020-11-07"
+
     > class(enddate)
+
     [1] "Date"
 
 Having dates stored as *Date*-class objects facilitates operations on
 dates such as calculating time differences:
 
     > head(enddate - startdate + 1)
+
     Time differences in days
     [1] 7 7 7 7 7 7
 
@@ -167,8 +164,11 @@ or extracting the month of each date:
 
     > m <- months(startdate, abbreviate=TRUE)
     > head(m)
-    [1] "Nov" "Nov" "Nov" "Oct" "Oct" "Oct"
+
+    [1] "nov" "nov" "nov" "nov" "nov" "nov"
+
     > class(m)
+
     [1] "character"
 
 where we have use the argument `abbreviate=TRUE` in the `months()`
@@ -186,9 +186,11 @@ instruction on the R shell:
 
     > Sys.setlocale("LC_TIME", "C")
 
+    [1] "C"
+
 and then type again:
 
-    > m <- months(startdate, abbreviate=TRUE))
+    > m <- months(startdate, abbreviate=TRUE)
 
 Verify that now the vector `m` has the month names in English.
 
@@ -216,7 +218,8 @@ vector `m` of character strings to a factor.
 
     > mf <- factor(m)
     > head(mf)
-    [1] Nov Nov Nov Oct Oct Oct
+
+    [1] Nov Nov Nov Nov Nov Nov
     Levels: Apr Aug Feb Jul Jun Mar May Nov Oct Sep
 
 We can see that R displays factors differently to character strings, by
@@ -226,8 +229,11 @@ the level information from a factor object with the functions `levels()`
 and `nlevels()`.
 
     > levels(mf)
+
      [1] "Apr" "Aug" "Feb" "Jul" "Jun" "Mar" "May" "Nov" "Oct" "Sep"
+
     > nlevels(mf)
+
     [1] 10
 
 Sometimes, we may want the levels of a factor to comprise a set of
@@ -237,13 +243,18 @@ have the levels corresponding to the months of the year. We can do that
 as follows:
 
     > mf <- factor(m, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+    +                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
     > head(mf)
-    [1] Nov Nov Nov Oct Oct Oct
+
+    [1] Nov Nov Nov Nov Nov Nov
     Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
     > levels(mf)
+
      [1] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"
+
     > nlevels(mf)
+
     [1] 12
 
 **Important:** The previous call to the `factor()` function will **only
@@ -256,9 +267,10 @@ Now, we can build a contingency table of the level occurrences of a
 factor using the function `table()`.
 
     > table(mf)
+
     mf
     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
-      0  18  93  90  93  90  93  93  90  93   3   0
+      0  18  93  90  93  90  93  93  90  93   6   0 
 
 We can see, there is no data in 2020 for the months of January (because
 data was not yet recorded) and December (because it was November at the
@@ -267,11 +279,14 @@ for which there is no data with the function `droplevels()`.
 
     > mf <- droplevels(mf)
     > levels(mf)
+
      [1] "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov"
+
     > table(mf)
+
     mf
     Feb Mar Apr May Jun Jul Aug Sep Oct Nov 
-     18  93  90  93  90  93  93  90  93   3 
+     18  93  90  93  90  93  93  90  93   6 
 
 Add the necessary lines of code to the script `covid19analysis.R` to
 create a factor object with the months in which each data row was
@@ -283,10 +298,10 @@ function of the month, calling plot with the formula notation `x ~ y`:
 
     > plot(datg$R0_CONFIRMAT_M ~ mf)
 
-where here `datg` refers to the subset of the original `data.frame`
-object `dat`, excluding data from geriatric residences, and `mf` refers
-to the factor object with the months from that subset of data. The
-resulting plot contains so-called [box
+![](R0byMonth-1.png) where here `datg` refers to the subset of the
+original `data.frame` object `dat`, excluding data from geriatric
+residences, and `mf` refers to the factor object with the months from
+that subset of data. The resulting plot contains so-called [box
 plots](https://en.wikipedia.org/wiki/Box_plot) for each month, which
 allow to visualize the location of the data in terms of
 [quartiles](https://en.wikipedia.org/wiki/Quartile).
@@ -294,9 +309,7 @@ allow to visualize the location of the data in terms of
 Once you have obtained the plot, look up in the help page of the
 `plot()` function, how can you change the labels for the `x` and `y`
 axes to a more readable label. The resulting plot should be similar to
-the one below.
-
-![](R0byMonth.png)
+the one above
 
 We can see that February has no data points for the column
 `R0_CONFIRMAT_M` despite there are data rows for that month. To find out
@@ -304,7 +317,8 @@ why we do not see any data on the plot we can inspect the values of
 `R0_CONFIRMAT_M` for the month of February as follows:
 
     > datg$R0_CONFIRMAT_M[mf == "Feb"]
-    [1] NA NA NA NA NA NA
+
+     [1] NA NA NA NA NA NA NA NA NA NA NA NA
 
 The value `NA` in R means *not available* and R treats it in a special
 way depending on the operation that is performing. In the case of plots,
@@ -324,26 +338,40 @@ values we want to group and a second argument with the grouping factor.
 
     > iepgbymonth <- split(datg$IEPG_CONFIRMAT, mf)
     > class(iepgbymonth)
+
     [1] "list"
+
     > length(iepgbymonth)
+
     [1] 10
+
     > names(iepgbymonth)
+
      [1] "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov"
+
     > head(iepgbymonth, n=3)
+
     $Feb
-    [1] NA NA NA NA NA NA
+     [1] NA NA NA NA NA NA NA NA NA NA NA NA
 
     $Mar
-     [1] 154.523 168.052 176.403 188.101 206.879 225.887 245.803 263.842 275.744
-    [10] 289.553 309.236 349.668 374.001 392.650 410.941 411.181 445.455 452.179
-    [19] 398.809 346.643 284.823 225.282 144.230 107.113      NA      NA      NA
-    [28]      NA      NA      NA      NA
+     [1] 154.523      NA 168.052      NA 176.403      NA 188.101      NA      NA
+    [10] 206.879      NA 225.887 245.803      NA 263.842      NA 275.744      NA
+    [19] 289.553      NA      NA 309.236      NA 349.668 374.001      NA 392.650
+    [28]      NA 410.941      NA 411.181      NA 445.455      NA      NA 452.179
+    [37] 398.809      NA 346.643      NA 284.823      NA 225.282      NA 144.230
+    [46]      NA      NA 107.113      NA      NA      NA      NA      NA      NA
+    [55]      NA      NA      NA      NA      NA      NA      NA      NA
 
     $Apr
-     [1]  24.1050  26.1615  28.3733  31.1514  33.6115  36.4087  42.9276  46.9114
-     [9]  51.8729  57.1702  61.3704  64.4527  68.6624  71.0281  76.4523  78.9826
-    [17]  82.4250  86.9431  87.4165  86.3060  87.9184  92.1927  98.2542 105.1500
-    [25] 118.3170 121.8560 124.6690 130.1430 136.0640 144.0100
+     [1]  24.1050       NA  26.1615       NA       NA  28.3733       NA  31.1514
+     [9]  33.6115       NA  36.4087       NA  42.9276       NA  46.9114       NA
+    [17]       NA  51.8729       NA  57.1702  61.3704       NA  64.4527       NA
+    [25]  68.6624       NA  71.0281       NA  76.4523       NA       NA  78.9826
+    [33]  82.4250       NA  86.9431       NA  87.4165       NA  86.3060       NA
+    [41]  87.9184       NA       NA  92.1927       NA  98.2542 105.1500       NA
+    [49] 118.3170       NA 121.8560       NA 124.6690       NA       NA 130.1430
+    [57]       NA 136.0640 144.0100       NA
 
 Grouping values can be useful in data analysis when we want to examine
 the data separately by groups. Let’s say we want to visualize the
@@ -356,20 +384,22 @@ function, as follows:
     > hist(iepgbymonth$Apr, xlab="Risk of outbreak", main="April")
     > hist(iepgbymonth$Jun, xlab="Risk of outbreak", main="June")
 
-![](IEPGAprilJune.png)
+![](IEPGAprilJune-1.png)
 
 Now, let’s calculate the mean of the risk of outbreak for the month of
 April. Having built the previous `list` object, we can make that
 calculation applying the function `mean()` to the corresponding element
 of the list:
 
-    > mean(iepgbymonth$Apr)
+    > mean(iepgbymonth$Apr, na.rm=TRUE)
+
     [1] 76.71023
 
 Let’s say we want to compare this value with the mean value for the
 month of March:
 
     > mean(iepgbymonth$Mar)
+
     [1] NA
 
 Here we got an `NA` value because the month of March has missing values
@@ -379,6 +409,7 @@ for some weeks and, by default, the function `mean()` propagates that
 argument `na.rm=TRUE`:
 
     > mean(iepgbymonth$Mar, na.rm=TRUE)
+
     [1] 285.2916
 
 It would be tedious to do that calculation for each different month by
@@ -403,6 +434,7 @@ We can calculate the mean of the risk of outbreak per month with the
 following call to the `sapply()` function:
 
     > sapply(iepgbymonth, mean, na.rm=TRUE)
+
           Feb       Mar       Apr       May       Jun       Jul       Aug       Sep 
           NaN 285.29158  76.71023  25.66524  20.77437 153.58826 190.42042 207.93477 
           Oct       Nov 
