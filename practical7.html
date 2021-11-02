@@ -4,9 +4,6 @@
 <li>Writing R scripts.</li>
 <li>How to manipulate dates in data.</li>
 <li>How to create and use factor objects.</li>
-<li>How to create and use list objects.</li>
-<li>How to perform implicit looping through lists.</li>
-<li>Learn visualizing data in different ways.</li>
 </ul>
 <h1 id="setup-and-background">Setup and background</h1>
 <p>To do this practical you need an installation of R and RStudio. You can find the instructions in the <a href="/setup#r-and-rstudio">setup</a> link on how to install R and RStudio in your system. For a smooth development of this practical, it is strongly recommended that you follow and finish the previous <a href="/seminar4/">seminar 4</a> on how to get started with R and RStudio.</p>
@@ -14,13 +11,13 @@
 <ol type="1">
 <li>Go to the Catalan Health Departament COVID19 data portal at <a href="https://dadescovid.cat" class="uri">https://dadescovid.cat</a> and switch the language to “ENGLISH” using the pull-down menu on the top-right corner of the page.</li>
 <li>Follow the downloads link and on the next page click and download the file corresponding to the “7 DAY AGGREGATION” for “CATALUNYA”. Make sure you know exactly where in your filesystem this file has been downloaded. <strong>Tip:</strong> some browsers automatically download files into a folder called “Downloads” or under a name corresponding to the translation of “Downloads” to the default language of your operating system.</li>
-<li>Make a directory in your filesystem, for instance at your <em>home</em> directory, called <code>practical9</code> and copy in it the downloaded file.</li>
-<li>Since the downloaded file is a ZIP file, uncompress as you did in <a href="/practical1/">practical 1</a> so that you finally have a file called <code>catalunya_setmanal.csv</code> in the directory <code>practical9</code>.</li>
+<li>Make a directory in your filesystem, for instance at your <em>home</em> directory, called <code>practical7</code> and copy in it the downloaded file.</li>
+<li>Since the downloaded file is a ZIP file, uncompress as you did in <a href="/practical1/">practical 1</a> so that you finally have a file called <code>catalunya_setmanal.csv</code> in the directory <code>practical7</code>.</li>
 </ol>
 <p>If you are using the UPF <a href="https://myapps.upf.edu">myapps</a> cloud to run RStudio, then you need to either use an internet browser in <em>myapps</em> to download the data file directly in the <em>myapps</em> cloud or upload to the <em>myapps</em> cloud the file that you have downloaded in your own computer.</p>
 <h1 id="writing-r-scripts">Writing R scripts</h1>
 <p>We may often use an interactive R session to quickly examine data or make some straightforward calculations. In such an interactive session, we can also recover previous instructions in the R shell by pressing the <code>upwards arrow</code> key. However, if we really want to keep track of the R commands we are using, we should write them in a text file with filename extension <code>.R</code>, which we shall refer hereafter as an <em>R script</em>.</p>
-<p>There are two main ways to create an R script: (1) openining a new file with a text editor and saving it with filename that includes the <code>.R</code> extension, or (2) if we are working with RStudio, then we click on the <code>File</code> menu and select the options <code>New File</code> -&gt; <code>R Script</code>. When we do that we should be getting the RStudio window splitted in four panes, the default three ones and one additional one for the newly created R script, as shown in the captured window below.</p>
+<p>There are two main ways to create an R script: (1) opening a new file with a text editor and saving it with filename that includes the <code>.R</code> extension, or (2) if we are working with RStudio, then we click on the <code>File</code> menu and select the options <code>New File</code> -&gt; <code>R Script</code>. When we do that we should be getting the RStudio window splitted in four panes, the default three ones and one additional one for the newly created R script, as shown in the captured window below.</p>
 <p><img src="RStudioNewScript.png" /></p>
 <p>Type in the newly created R script (either with a text editor or with RStudio) the following two lines to read the CSV file downloaded in the previous section. The first line is a comment. Lines starting with the <code>#</code> symbol are comments in R.</p>
 <pre><code>&gt; ## read COVID19 data
@@ -55,7 +52,7 @@
 5   3846   166                 7.0666              71               14      0
 6   8552  2088                10.6121             119                5    143</code></pre>
 <p>It has two columns with date information (<code>DATA_INI</code> and <code>DATA_FI</code>), but which are stored as string characters (more specifically <em>factors</em>). However, R provides a way to store dates as such and this has the advantage that facilitates manipulating them for analysis purposes.</p>
-<p>For instance, to two transform the two columns containing date data we should use the function <code>as.Date()</code> as follows:</p>
+<p>For instance, to transform the two columns containing date data we should use the function <code>as.Date()</code> as follows:</p>
 <pre><code>&gt; startdate &lt;- as.Date(dat$DATA_INI)
 &gt; enddate &lt;- as.Date(dat$DATA_FI)</code></pre>
 <p>While R displays these objects as vectors of character strings, they do belong to a different class of objects, the class <em>Date</em>.</p>
@@ -85,21 +82,19 @@ Time differences in days
 <pre><code>&gt; m &lt;- months(startdate, abbreviate=TRUE)
 &gt; head(m)
 
-[1] &quot;nov&quot; &quot;nov&quot; &quot;nov&quot; &quot;nov&quot; &quot;nov&quot; &quot;nov&quot;
+[1] &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot;
 
 &gt; class(m)
 
 [1] &quot;character&quot;</code></pre>
-<p>where we have use the argument <code>abbreviate=TRUE</code> in the <code>months()</code> function to obtain a vector of equally sized character strings, which may be useful for visualization purposes.</p>
+<p>where we have to use the argument <code>abbreviate=TRUE</code> in the <code>months()</code> function to obtain a vector of equally sized character strings, which may be useful for visualization purposes.</p>
 <p><strong>Important:</strong> The previous vector <code>m</code> may contain the names of the months in a different language than English when the regional configuration of your operating system, known as <a href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale configuration</a>, is also different to English. In such a case, it may be handy to switch at least the regional time configuration to English, to facilitate following the rest of this practical. To do that, type the following instruction on the R shell:</p>
-<pre><code>&gt; Sys.setlocale(&quot;LC_TIME&quot;, &quot;C&quot;)
-
-[1] &quot;C&quot;</code></pre>
+<pre><code>&gt; Sys.setlocale(&quot;LC_TIME&quot;, &quot;C&quot;)</code></pre>
 <p>and then type again:</p>
 <pre><code>&gt; m &lt;- months(startdate, abbreviate=TRUE)</code></pre>
 <p>Verify that now the vector <code>m</code> has the month names in English.</p>
 <h1 id="factors">Factors</h1>
-<p>Factors in R are a class of objects that serves the purpose of storing what is known in statistics as a <a href="https://en.wikipedia.org/wiki/Categorical_variable">categorical variable</a>, which is a variable that takes values from a limited number of <em>categories</em>, also known as <em>levels</em>. So factors are pretty much like vectors of character strings, but with additional information about what are the different values that may ocurr on those vectors.</p>
+<p>Factors in R are a class of objects that serve the purpose of storing what is known in statistics as a <a href="https://en.wikipedia.org/wiki/Categorical_variable">categorical variable</a>, which is a variable that takes values from a limited number of <em>categories</em>, also known as <em>levels</em>. So factors are pretty much like vectors of character strings, but with additional information about what are the different values that may occur on those vectors.</p>
 <p>Not all vectors of character strings are suitable to become factors. For instance, a vector of character strings corresponding to gene identifiers tipically should not become a factor in R, because those identifiers do not represent any kind of <em>category</em> grouping observations.</p>
 <p>Factors are useful, however, in the context of a statistical analysis and data visualization, involving categorical variables. To create a factor object we should call the function <code>factor()</code> giving a vector of character strings as argument. Let’s consider converting the previous vector <code>m</code> of character strings to a factor.</p>
 <pre><code>&gt; mf &lt;- factor(m)
@@ -155,72 +150,8 @@ Feb Mar Apr May Jun Jul Aug Sep Oct Nov
 <p>We can see that February has no data points for the column <code>R0_CONFIRMAT_M</code> despite there are data rows for that month. To find out why we do not see any data on the plot we can inspect the values of <code>R0_CONFIRMAT_M</code> for the month of February as follows:</p>
 <pre><code>&gt; datg$R0_CONFIRMAT_M[mf == &quot;Feb&quot;]
 
- [1] NA NA NA NA NA NA NA NA NA NA NA NA</code></pre>
+[1] NA NA NA NA NA NA</code></pre>
 <p>The value <code>NA</code> in R means <em>not available</em> and R treats it in a special way depending on the operation that is performing. In the case of plots, <code>NA</code> values are ignored.</p>
 <p>Plot now the risk of outbreak as function of the month, can you identify the month in which this risk has increased the most? Add the two plotting instructions to the <code>covid19analysis.R</code> script.</p>
-<h1 id="lists-and-implicit-looping">Lists and implicit looping</h1>
-<p>Lists allow one to group values through their elements. Let’s say we want to group the values of the risk of outbreak in the previous data, by the month in which the data belongs to. We can do that using the function <code>split()</code> to which we should give a first argument of the values we want to group and a second argument with the grouping factor.</p>
-<pre><code>&gt; iepgbymonth &lt;- split(datg$IEPG_CONFIRMAT, mf)
-&gt; class(iepgbymonth)
-
-[1] &quot;list&quot;
-
-&gt; length(iepgbymonth)
-
-[1] 10
-
-&gt; names(iepgbymonth)
-
- [1] &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot;
-
-&gt; head(iepgbymonth, n=3)
-
-$Feb
- [1] NA NA NA NA NA NA NA NA NA NA NA NA
-
-$Mar
- [1] 154.523      NA 168.052      NA 176.403      NA 188.101      NA      NA
-[10] 206.879      NA 225.887 245.803      NA 263.842      NA 275.744      NA
-[19] 289.553      NA      NA 309.236      NA 349.668 374.001      NA 392.650
-[28]      NA 410.941      NA 411.181      NA 445.455      NA      NA 452.179
-[37] 398.809      NA 346.643      NA 284.823      NA 225.282      NA 144.230
-[46]      NA      NA 107.113      NA      NA      NA      NA      NA      NA
-[55]      NA      NA      NA      NA      NA      NA      NA      NA
-
-$Apr
- [1]  24.1050       NA  26.1615       NA       NA  28.3733       NA  31.1514
- [9]  33.6115       NA  36.4087       NA  42.9276       NA  46.9114       NA
-[17]       NA  51.8729       NA  57.1702  61.3704       NA  64.4527       NA
-[25]  68.6624       NA  71.0281       NA  76.4523       NA       NA  78.9826
-[33]  82.4250       NA  86.9431       NA  87.4165       NA  86.3060       NA
-[41]  87.9184       NA       NA  92.1927       NA  98.2542 105.1500       NA
-[49] 118.3170       NA 121.8560       NA 124.6690       NA       NA 130.1430
-[57]       NA 136.0640 144.0100       NA</code></pre>
-<p>Grouping values can be useful in data analysis when we want to examine the data separately by groups. Let’s say we want to visualize the distribution of values of the risk of outbreak for the month of April and June, next to each other. We can use the function <code>hist()</code> for that purpose, creating a grid of two plotting panes using the <code>par()</code> function, as follows:</p>
-<pre><code>&gt; par(mfrow=c(1, 2))
-&gt; hist(iepgbymonth$Apr, xlab=&quot;Risk of outbreak&quot;, main=&quot;April&quot;)
-&gt; hist(iepgbymonth$Jun, xlab=&quot;Risk of outbreak&quot;, main=&quot;June&quot;)</code></pre>
-<p><img src="IEPGAprilJune-1.png" /></p>
-<p>Now, let’s calculate the mean of the risk of outbreak for the month of April. Having built the previous <code>list</code> object, we can make that calculation applying the function <code>mean()</code> to the corresponding element of the list:</p>
-<pre><code>&gt; mean(iepgbymonth$Apr, na.rm=TRUE)
-
-[1] 76.71023</code></pre>
-<p>Let’s say we want to compare this value with the mean value for the month of March:</p>
-<pre><code>&gt; mean(iepgbymonth$Mar)
-
-[1] NA</code></pre>
-<p>Here we got an <code>NA</code> value because the month of March has missing values for some weeks and, by default, the function <code>mean()</code> propagates that <code>NA</code> value to the result. We can ask the <code>mean()</code> function to exclude <code>NA</code> values and do the calculation on the non-missing ones using the argument <code>na.rm=TRUE</code>:</p>
-<pre><code>&gt; mean(iepgbymonth$Mar, na.rm=TRUE)
-
-[1] 285.2916</code></pre>
-<p>It would be tedious to do that calculation for each different month by writing one such function call for each element of the list. As an alternative, we could use a <code>while</code> or <code>for</code> loop that would iterate over the elements of the list. However, R provides a more compact way to iterating over lists, and other objects, by using functions for <em>implicit</em> <a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Looping">looping</a> such as <code>lapply()</code> or <code>sapply()</code>. These functions take a list as a first argument, iterate through each element of that list, and at each iteration apply the function given in the second argument. Additional arguments can be given and will be passed to the <em>applied</em> function.</p>
-<p>The function <code>lapply()</code> returns again the input list with its elements replaced by the result given by the function on each corresponding element, while the function <code>sapply()</code> attempts to simplify the resulting data structure in that if each element of the resulting list has length 1, then it return an atomic vector.</p>
-<p>We can calculate the mean of the risk of outbreak per month with the following call to the <code>sapply()</code> function:</p>
-<pre><code>&gt; sapply(iepgbymonth, mean, na.rm=TRUE)
-
-      Feb       Mar       Apr       May       Jun       Jul       Aug       Sep 
-      NaN 285.29158  76.71023  25.66524  20.77437 153.58826 190.42042 207.93477 
-      Oct       Nov 
-702.40661 607.29200 </code></pre>
-<p>where here the argument <code>na.rm=TRUE</code> is passed by <code>sapply()</code> to each call to the <code>mean()</code> function. Try the same call using the <code>lapply()</code> function and notice the difference in the output.</p>
-<p>Plot the distribution of the number of deaths (column <code>EXITUS</code>) per month in the general population (using box plots). Calculate the mean of the number of deaths per month in the general population and plot it over the previous box plots using the function <code>points()</code>. Check the help page of <code>points()</code> to find out how to use it, figure out how make the plotted point to be a solid diamond (<strong>hint:</strong> look at the argument <code>pch</code>).</p>
+<pre><code>&gt; ## plot risk of outbreak as function of the month
+&gt; plot(datg$IEPG_CONFIRMAT ~ mf, xlab=&quot;Month&quot;, ylab=&quot;Risk of outbreak&quot;)</code></pre>
