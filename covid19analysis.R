@@ -1,6 +1,7 @@
 ## read COVID19 data
 dat <- read.csv("catalunya_setmanal.csv", sep=";", stringsAsFactors=TRUE)
 
+## PRACTICAL 7 ----------------------------------------------------------------
 ## subset the data from the general population
 datg <- dat[dat$RESIDENCIA == "No", ]
 
@@ -19,6 +20,7 @@ mf <- droplevels(mf)
 plot(datg$R0_CONFIRMAT_M ~ mf, xlab="Month", ylab="R0")
 plot(datg$IEPG_CONFIRMAT ~ mf, xlab="Month", ylab="Risk of outbreak")
 
+## PRACTICAL 8 ----------------------------------------------------------------
 ## group risk of outbreak by month
 iepgbymonth <- split(datg$IEPG_CONFIRMAT, mf)
 
