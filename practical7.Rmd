@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.path = "",
                       comment="", 
                       prompt=TRUE)
+Sys.setlocale("LC_TIME", "C")
 ```
 
 # Objectives
@@ -18,9 +19,6 @@ The learning objectives for this practical are:
   * Writing R scripts.
   * How to manipulate dates in data.
   * How to create and use factor objects.
-  * How to create and use list objects.
-  * How to perform implicit looping through lists.
-  * Learn visualizing data in different ways.
 
 # Setup and background
 
@@ -43,10 +41,10 @@ Please follow the next two steps:
    into a folder called "Downloads" or under a name corresponding to the
    translation of "Downloads" to the default language of your operating system.
 3. Make a directory in your filesystem, for instance at your _home_ directory,
-   called `practical9` and copy in it the downloaded file.
+   called `practical7` and copy in it the downloaded file.
 4. Since the downloaded file is a ZIP file, uncompress as you did in
    [practical 1](/practical1/) so that you finally have a file called
-   `catalunya_setmanal.csv` in the directory `practical9`.
+   `catalunya_setmanal.csv` in the directory `practical7`.
 
 If you are using the UPF [myapps](https://myapps.upf.edu) cloud to run RStudio,
 then you need to either use an internet browser in _myapps_ to download the data
@@ -62,7 +60,7 @@ if we really want to keep track of the R commands we are using, we should write
 them in a text file with filename extension `.R`, which we shall refer hereafter
 as an _R script_. 
 
-There are two main ways to create an R script: (1) openining a new file with a
+There are two main ways to create an R script: (1) opening a new file with a
 text editor and saving it with filename that includes the `.R` extension, or (2)
 if we are working with RStudio, then we click on the `File` menu and select
 the options `New File` -> `R Script`. When we do that we should be getting the
@@ -101,6 +99,12 @@ Add to the script `covid19analysis.R` the necessary code to obtain a new `data.f
 object including only data from the general population, i.e., excluding data from
 geriatric residences.
 
+```{r include=FALSE}
+## subset the data from the general population
+datg <- dat[dat$RESIDENCIA == "No", ]
+```
+
+
 # Date-data management
 
 These are the first 6 rows of the previously loaded CSV file:
@@ -114,7 +118,7 @@ are stored as string characters (more specifically _factors_). However, R
 provides a way to store dates as such and this has the advantage that
 facilitates manipulating them for analysis purposes.
 
-For instance, to two transform the two columns containing date data we should
+For instance, to transform the two columns containing date data we should
 use the function `as.Date()` as follows:
 
 ```{r}
@@ -148,7 +152,7 @@ class(m)
 ```
 
 
-where we have use the argument `abbreviate=TRUE` in the `months()` function
+where we have to use the argument `abbreviate=TRUE` in the `months()` function
 to obtain a vector of equally sized character strings, which may be useful
 for visualization purposes.
 
@@ -161,7 +165,7 @@ least the regional time configuration to English, to facilitate following
 the rest of this practical. To do that, type the following instruction on
 the R shell:
 
-```{r}
+```{r, eval=FALSE}
 Sys.setlocale("LC_TIME", "C")
 ```
 
@@ -174,13 +178,13 @@ Verify that now the vector `m` has the month names in English.
 
 # Factors
 
-Factors in R are a class of objects that serves the purpose of storing what
+Factors in R are a class of objects that serve the purpose of storing what
 is known in statistics as a
 [categorical variable](https://en.wikipedia.org/wiki/Categorical_variable),
 which is a variable that takes values from a limited number of _categories_,
 also known as _levels_. So factors are pretty much like vectors of character
 strings, but with additional information about what are the different values
-that may ocurr on those vectors.
+that may occur on those vectors.
 
 Not all vectors of character strings are suitable to become factors. For
 instance, a vector of character strings corresponding to gene identifiers
@@ -250,9 +254,16 @@ of the columns `R0_CONFIRMAT_M` (R0 basic reproduction number) and
 function of the month, calling plot with the formula notation `x ~ y`:
 
 ```{r, echo=FALSE}
-dat$mf <- mf
-datg <- dat[dat$RESIDENCIA!="Si",]
-mf <- datg$mf
+## fetch starting date
+startingdate <- as.Date(datg$DATA_INI)
+
+## extract the month from the starting date
+m <- months(startingdate, abbreviate=TRUE)
+
+## build a factor for the months of the year in the data
+mf <- factor(m, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+mf <- droplevels(mf)
 ```
 
 ```{r R0byMonth}
@@ -285,84 +296,8 @@ Plot now the risk of outbreak as function of the month, can you
 identify the month in which this risk has increased the most? Add the two
 plotting instructions to the `covid19analysis.R` script.
 
-# Lists and implicit looping
-
-Lists allow one to group values through their elements. Let's say we want
-to group the values of the risk of outbreak in the previous data, by the
-month in which the data belongs to. We can do that using the function
-`split()` to which we should give a first argument of the values we want
-to group and a second argument with the grouping factor.
-
-```{r}
-iepgbymonth <- split(datg$IEPG_CONFIRMAT, mf)
-class(iepgbymonth)
-length(iepgbymonth)
-names(iepgbymonth)
-head(iepgbymonth, n=3)
+```{r eval=FALSE}
+## plot risk of outbreak as function of the month
+plot(datg$IEPG_CONFIRMAT ~ mf, xlab="Month", ylab="Risk of outbreak")
 ```
 
-Grouping values can be useful in data analysis when we want to examine the
-data separately by groups. Let's say we want to visualize the distribution
-of values of the risk of outbreak for the month of April and June, next to
-each other. We can use the function `hist()` for that purpose, creating a
-grid of two plotting panes using the `par()` function, as follows:
-
-```{r IEPGAprilJune}
-par(mfrow=c(1, 2))
-hist(iepgbymonth$Apr, xlab="Risk of outbreak", main="April")
-hist(iepgbymonth$Jun, xlab="Risk of outbreak", main="June")
-```
-
-Now, let's calculate the mean of the risk of outbreak for the month of April.
-Having built the previous `list` object, we can make that calculation applying
-the function `mean()` to the corresponding element of the list:
-
-```{r}
-mean(iepgbymonth$Apr, na.rm=TRUE)
-```
-Let's say we want to compare this value with the mean value for the month of
-March:
-
-```{r}
-mean(iepgbymonth$Mar)
-```
-Here we got an `NA` value because the month of March has missing values for
-some weeks and, by default, the function `mean()` propagates that `NA` value
-to the result. We can ask the `mean()` function to exclude `NA` values and
-do the calculation on the non-missing ones using the argument `na.rm=TRUE`:
-
-```{r}
-mean(iepgbymonth$Mar, na.rm=TRUE)
-```
-It would be tedious to do that calculation for each different month by
-writing one such function call for each element of the list. As an alternative,
-we could use a `while` or `for` loop that would iterate over the elements of
-the list. However, R provides a more compact way to iterating over lists,
-and other objects, by using functions for _implicit_
-[looping](https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Looping)
-such as `lapply()` or `sapply()`. These functions take a list as a first argument,
-iterate through each element of that list, and at each iteration apply the function
-given in the second argument. Additional arguments can be given and will be passed
-to the _applied_ function.
-
-The function `lapply()` returns again the input list with its elements replaced
-by the result given by the function on each corresponding element, while the
-function `sapply()` attempts to simplify the resulting data structure in that if
-each element of the resulting list has length 1, then it return an atomic vector.
-
-We can calculate the mean of the risk of outbreak per month with the following
-call to the `sapply()` function:
-
-```{r}
-sapply(iepgbymonth, mean, na.rm=TRUE)
-```
-where here the argument `na.rm=TRUE` is passed by `sapply()` to each call to
-the `mean()` function. Try the same call using the `lapply()` function and
-notice the difference in the output.
-
-Plot the distribution of the number of deaths (column `EXITUS`) per month in
-the general population (using box plots). Calculate the mean of the number of
-deaths per month in the general population and plot it over the previous box
-plots using the function `points()`. Check the help page of `points()` to find
-out how to use it, figure out how make the plotted point to be a solid diamond
-(**hint:** look at the argument `pch`).
