@@ -95,39 +95,59 @@ changes the working directory in an R script. The reason is because you or someb
 else may want to run that script in a different computer where the directory with
 the data may be called differently.
 
-Add to the script `covid19analysis.R` the necessary code to obtain a new `data.frame`
-object including only data from the general population, i.e., excluding data from
-geriatric residences.
-
-```{r include=FALSE}
-## subset the data from the general population
-datg <- dat[dat$RESIDENCIA == "No", ]
-```
-
-
-# Date-data management
-
-These are the first 6 rows of the previously loaded CSV file:
+You can examine the first 6 rows of the loaded CSV file with the `head()` function
+as follows:
 
 ```{r}
 head(dat)
 ```
 
-It has two columns with date information (`DATA_INI` and `DATA_FI`), but which
-are stored as string characters (more specifically _factors_). However, R
-provides a way to store dates as such and this has the advantage that
-facilitates manipulating them for analysis purposes.
+**Exercise**: now add to the script `covid19analysis.R` the following two lines
+to obtain a new `data.frame` object called `datg` that includes only data from
+the general population, i.e., excluding data from geriatric residences. You have
+to figure out the code that replaces de questions marks `??????`.
+
+```{r eval=FALSE}
+mask <- ??????
+datg <- dat[mask, ]
+```
+
+Once you subset data, it is always convenient to compare the dimensions of the
+original and resulting object, using the function `dim()`, and think whether the
+difference in dimensions makes sense (e.g., subsetting should always lead to a
+smaller object in some dimension).
+
+```{r include=FALSE}
+mask <- dat$RESIDENCIA == "No"
+datg <- dat[mask, ]
+```
+
+# Date-data management
+
+These are the first 6 rows of the filtered `data.frame` object you should have
+obtained from the previous exercise:
+
+```{r}
+head(datg)
+```
+
+It has two columns with date information (`DATA_INI` and `DATA_FI`),
+corresponding to the begining and end of the 7-day period of the data of that
+row, but which are stored as string character vectors (more specifically as
+[factors](https://funcompbio.github.io/lecture6/#25)). However, R provides a
+way to store dates as such and this has the advantage that facilitates
+manipulating them for analysis purposes.
 
 For instance, to transform the two columns containing date data we should
 use the function `as.Date()` as follows:
 
 ```{r}
-startdate <- as.Date(dat$DATA_INI)
-enddate <- as.Date(dat$DATA_FI)
+startdate <- as.Date(datg$DATA_INI)
+enddate <- as.Date(datg$DATA_FI)
 ```
 
-While R displays these objects as vectors of character strings, they do belong to
-a different class of objects, the class _Date_.
+While R displays these objects as vectors of character strings, they do belong
+to a different class of objects, the class _Date_.
 
 ```{r}
 head(startdate)
@@ -143,14 +163,30 @@ as calculating time differences:
 ```{r}
 head(enddate - startdate + 1)
 ```
-or extracting the month of each date:
+
+or subsetting data for a period of time. For instance, let's subset the data,
+selecting rows corresponding to data between January and November from 2020,
+the year in which the COVID19 pandemic started:
 
 ```{r}
+mask <- startdate >= as.Date("2020-01-01") & enddate <= as.Date("2020-11-30")
+sum(mask)
+datg20 <- datg[mask, ]
+dim(datg20)
+```
+
+Note that the number of `TRUE` values in the logical mask matches the resulting
+number of rows in the subsetted object `datg20`.
+
+
+Date data also allows one to easily extract the month of each date:
+
+```{r}
+startdate <- as.Date(datg20$DATA_INI)
 m <- months(startdate, abbreviate=TRUE)
 head(m)
 class(m)
 ```
-
 
 where we have to use the argument `abbreviate=TRUE` in the `months()` function
 to obtain a vector of equally sized character strings, which may be useful
@@ -169,7 +205,6 @@ the R shell:
 Sys.setlocale("LC_TIME", "C")
 ```
 
-
 and then type again:
 ```{r}
 m <- months(startdate, abbreviate=TRUE)
@@ -178,8 +213,8 @@ Verify that now the vector `m` has the month names in English.
 
 # Factors
 
-Factors in R are a class of objects that serve the purpose of storing what
-is known in statistics as a
+[Factors](https://funcompbio.github.io/lecture6/#25) in R are a class of objects
+that serve the purpose of storing what is known in statistics as a
 [categorical variable](https://en.wikipedia.org/wiki/Categorical_variable),
 which is a variable that takes values from a limited number of _categories_,
 also known as _levels_. So factors are pretty much like vectors of character
@@ -214,7 +249,8 @@ nlevels(mf)
 Sometimes, we may want the levels of a factor to comprise a set of specific
 values or to be ordered in a specific way. This could be the case of the
 previous factor `mf`, where we would like for instance to have the
-levels corresponding to the months of the year. We can do that as follows:
+levels corresponding to the months of the year and chronologically ordered.
+We can do that as follows:
 
 ```{r}
 mf <- factor(m, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -235,9 +271,9 @@ using the function `table()`.
 table(mf)
 ```
 We can see, there is no data in 2020 for the months of January (because
-data was not yet recorded) and December (because it was November at the
-time of elaborating this practical). We can remove levels of a factor
-for which there is no data with the function `droplevels()`.
+data was not yet recorded) and December (because it is outside the period
+we have subsetted the data). We can remove levels of a factor for which there
+is no data with the function `droplevels()`.
 
 ```{r}
 mf <- droplevels(mf)
@@ -245,40 +281,23 @@ levels(mf)
 table(mf)
 ```
 
-Add the necessary lines of code to the script `covid19analysis.R` to
-create a factor object with the months in which each data row was
-recorded in the general population, i.e., excluding data from geriatric
-residences. Using this factor we can easily visualize the distribution
-of the columns `R0_CONFIRMAT_M` (R0 basic reproduction number) and
-`IEPG_CONFIRMAT` (risk of outbreak) in the general population, as
-function of the month, calling plot with the formula notation `x ~ y`:
-
-```{r, echo=FALSE}
-## fetch starting date
-startingdate <- as.Date(datg$DATA_INI)
-
-## extract the month from the starting date
-m <- months(startingdate, abbreviate=TRUE)
-
-## build a factor for the months of the year in the data
-mf <- factor(m, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
-mf <- droplevels(mf)
-```
+Using this factor we can easily visualize the distribution of the column
+`R0_CONFIRMAT_M`
+([R0 basic reproduction number](https://en.wikipedia.org/wiki/Basic_reproduction_number))
+as function of the month, calling plot with the formula notation `x ~ y`
+(add this plotting instruction to the `covid19analysis.R` script):
 
 ```{r R0byMonth}
-plot(datg$R0_CONFIRMAT_M ~ mf)
+plot(datg20$R0_CONFIRMAT_M ~ mf)
 ```
-where here `datg` refers to the subset of the original `data.frame`
-object `dat`, excluding data from geriatric residences, and `mf` refers
-to the factor object with the months from that subset of data. The resulting
+
+where here `datg20` refers to the subset of the original `data.frame`
+object `dat`, excluding data from geriatric residences and including only
+data between January and November 2020, and `mf` refers to the factor object
+with the months from that subset of data. The resulting
 plot contains so-called [box plots](https://en.wikipedia.org/wiki/Box_plot)
 for each month, which allow to visualize the location of the data in terms
 of [quartiles](https://en.wikipedia.org/wiki/Quartile).
-
-Once you have obtained the plot, look up in the help page of the `plot()`
-function, how can you change the labels for the `x` and `y` axes to a more
-readable label. The resulting plot should be similar to the one above
 
 We can see that February has no data points for the column `R0_CONFIRMAT_M`
 despite there are data rows for that month. To find out why we do not see
@@ -286,18 +305,26 @@ any data on the plot we can inspect the values of `R0_CONFIRMAT_M` for
 the month of February as follows:
 
 ```{r}
-datg$R0_CONFIRMAT_M[mf == "Feb"]
+mask <- mf == "Feb"
+datg20$R0_CONFIRMAT_M[mask]
 ```
 The value `NA` in R means _not available_ and R treats it in a special
 way depending on the operation that is performing. In the case of plots, `NA`
 values are ignored.
 
-Plot now the risk of outbreak as function of the month, can you
-identify the month in which this risk has increased the most? Add the two
-plotting instructions to the `covid19analysis.R` script.
+**Exercise:** look up in the help page of the `plot()` function, how can you
+change the labels for the `x` and `y` axes to a readable label whose meaning
+stands alone and minimally describes the data visualized in that axis. The
+resulting plot should be identical to the one above, but with the axes labels
+changed.
+
+**Exercise:** produce the same kind of plot, but this time showing in the
+_y_-axis the values of the column `IEPG_CONFIRMAT`, corresponding to the
+[effective potential growth](https://doi.org/10.1371/journal.pone.0243701)
+also known as risk of outbreak. Can you identify the month in which this risk
+has increased the most?
 
 ```{r eval=FALSE}
 ## plot risk of outbreak as function of the month
-plot(datg$IEPG_CONFIRMAT ~ mf, xlab="Month", ylab="Risk of outbreak")
+plot(datg20$IEPG_CONFIRMAT ~ mf, xlab="Month", ylab="Risk of outbreak")
 ```
-
