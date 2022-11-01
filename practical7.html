@@ -6,60 +6,189 @@
 <li>How to create and use factor objects.</li>
 </ul>
 <h1 id="setup-and-background">Setup and background</h1>
-<p>To do this practical you need an installation of R and RStudio. You can find the instructions in the <a href="/setup#r-and-rstudio">setup</a> link on how to install R and RStudio in your system. For a smooth development of this practical, it is strongly recommended that you follow and finish the previous <a href="/seminar4/">seminar 4</a> on how to get started with R and RStudio.</p>
-<p>We will download some COVID19 data to illustrate the use of R and RStudio. Please follow the next two steps:</p>
+<p>To do this practical you need an installation of R and RStudio. You
+can find the instructions in the <a
+href="/setup#r-and-rstudio">setup</a> link on how to install R and
+RStudio in your system. For a smooth development of this practical, it
+is strongly recommended that you follow and finish the previous <a
+href="/seminar4/">seminar 4</a> on how to get started with R and
+RStudio.</p>
+<p>We will download some COVID19 data to illustrate the use of R and
+RStudio. Please follow the next two steps:</p>
 <ol type="1">
-<li>Go to the Catalan Health Departament COVID19 data portal at <a href="https://dadescovid.cat" class="uri">https://dadescovid.cat</a> and switch the language to “ENGLISH” using the pull-down menu on the top-right corner of the page.</li>
-<li>Follow the downloads link and on the next page click and download the file corresponding to the “7 DAY AGGREGATION” for “CATALUNYA”. Make sure you know exactly where in your filesystem this file has been downloaded. <strong>Tip:</strong> some browsers automatically download files into a folder called “Downloads” or under a name corresponding to the translation of “Downloads” to the default language of your operating system.</li>
-<li>Make a directory in your filesystem, for instance at your <em>home</em> directory, called <code>practical7</code> and copy in it the downloaded file.</li>
-<li>Since the downloaded file is a ZIP file, uncompress as you did in <a href="/practical1/">practical 1</a> so that you finally have a file called <code>catalunya_setmanal.csv</code> in the directory <code>practical7</code>.</li>
+<li>Go to the Catalan Health Departament COVID19 data portal at <a
+href="https://dadescovid.cat" class="uri">https://dadescovid.cat</a> and
+switch the language to “ENGLISH” using the pull-down menu on the
+top-right corner of the page.</li>
+<li>Follow the downloads link and on the next page click and download
+the file corresponding to the “7 DAY AGGREGATION” for “CATALUNYA”. Make
+sure you know exactly where in your filesystem this file has been
+downloaded. <strong>Tip:</strong> some browsers automatically download
+files into a folder called “Downloads” or under a name corresponding to
+the translation of “Downloads” to the default language of your operating
+system.</li>
+<li>Make a directory in your filesystem, for instance at your
+<em>home</em> directory, called <code>practical7</code> and copy in it
+the downloaded file.</li>
+<li>Since the downloaded file is a ZIP file, uncompress as you did in <a
+href="/practical1/">practical 1</a> so that you finally have a file
+called <code>catalunya_setmanal.csv</code> in the directory
+<code>practical7</code>.</li>
 </ol>
-<p>If you are using the UPF <a href="https://myapps.upf.edu">myapps</a> cloud to run RStudio, then you need to either use an internet browser in <em>myapps</em> to download the data file directly in the <em>myapps</em> cloud or upload to the <em>myapps</em> cloud the file that you have downloaded in your own computer.</p>
+<p>If you are using the UPF <a href="https://myapps.upf.edu">myapps</a>
+cloud to run RStudio, then you need to either use an internet browser in
+<em>myapps</em> to download the data file directly in the
+<em>myapps</em> cloud or upload to the <em>myapps</em> cloud the file
+that you have downloaded in your own computer.</p>
 <h1 id="writing-r-scripts">Writing R scripts</h1>
-<p>We may often use an interactive R session to quickly examine data or make some straightforward calculations. In such an interactive session, we can also recover previous instructions in the R shell by pressing the <code>upwards arrow</code> key. However, if we really want to keep track of the R commands we are using, we should write them in a text file with filename extension <code>.R</code>, which we shall refer hereafter as an <em>R script</em>.</p>
-<p>There are two main ways to create an R script: (1) opening a new file with a text editor and saving it with filename that includes the <code>.R</code> extension, or (2) if we are working with RStudio, then we click on the <code>File</code> menu and select the options <code>New File</code> -&gt; <code>R Script</code>. When we do that we should be getting the RStudio window splitted in four panes, the default three ones and one additional one for the newly created R script, as shown in the captured window below.</p>
+<p>We may often use an interactive R session to quickly examine data or
+make some straightforward calculations. In such an interactive session,
+we can also recover previous instructions in the R shell by pressing the
+<code>upwards arrow</code> key. However, if we really want to keep track
+of the R commands we are using, we should write them in a text file with
+filename extension <code>.R</code>, which we shall refer hereafter as an
+<em>R script</em>.</p>
+<p>There are two main ways to create an R script: (1) opening a new file
+with a text editor and saving it with filename that includes the
+<code>.R</code> extension, or (2) if we are working with RStudio, then
+we click on the <code>File</code> menu and select the options
+<code>New File</code> -&gt; <code>R Script</code>. When we do that we
+should be getting the RStudio window splitted in four panes, the default
+three ones and one additional one for the newly created R script, as
+shown in the captured window below.</p>
 <p><img src="RStudioNewScript.png" /></p>
-<p>Type in the newly created R script (either with a text editor or with RStudio) the following two lines to read the CSV file downloaded in the previous section. The first line is a comment. Lines starting with the <code>#</code> symbol are comments in R.</p>
+<p>Type in the newly created R script (either with a text editor or with
+RStudio) the following two lines to read the CSV file downloaded in the
+previous section. The first line is a comment. Lines starting with the
+<code>#</code> symbol are comments in R.</p>
 <pre><code>&gt; ## read COVID19 data
 &gt; dat &lt;- read.csv(&quot;catalunya_setmanal.csv&quot;, sep=&quot;;&quot;, stringsAsFactors=TRUE)</code></pre>
-<p>Now save the R script in the directory <code>practical7</code> under the filename <code>covid19analysis.R</code>.</p>
-<p>To execute a specific line of an R script in RStudio you should move the cursor to that line in the pane with the script file and press the key combination <code>Ctrl+Enter</code>. Alternatively, you can also copy and paste the line from the script to the R shell, specially if you are not working with RStudio.</p>
-<p>The previous line may produce an error if the current working directory of R is not pointing to the directory where the file <code>catalunya_setmanal.csv</code> is; see previous <a href="/seminar4/">seminar 4</a> if you need to find out how to change the working directory in R and RStudio. In general, changing the working directory should be always performed in the R shell and <strong>NEVER</strong> include the instruction that changes the working directory in an R script. The reason is because you or somebody else may want to run that script in a different computer where the directory with the data may be called differently.</p>
-<p>Add to the script <code>covid19analysis.R</code> the necessary code to obtain a new <code>data.frame</code> object including only data from the general population, i.e., excluding data from geriatric residences.</p>
-<h1 id="date-data-management">Date-data management</h1>
-<p>These are the first 6 rows of the previously loaded CSV file:</p>
+<p>Now save the R script in the directory <code>practical7</code> under
+the filename <code>covid19analysis.R</code>.</p>
+<p>To execute a specific line of an R script in RStudio you should move
+the cursor to that line in the pane with the script file and press the
+key combination <code>Ctrl+Enter</code>. Alternatively, you can also
+copy and paste the line from the script to the R shell, specially if you
+are not working with RStudio.</p>
+<p>The previous line may produce an error if the current working
+directory of R is not pointing to the directory where the file
+<code>catalunya_setmanal.csv</code> is; see previous <a
+href="/seminar4/">seminar 4</a> if you need to find out how to change
+the working directory in R and RStudio. In general, changing the working
+directory should be always performed in the R shell and
+<strong>NEVER</strong> include the instruction that changes the working
+directory in an R script. The reason is because you or somebody else may
+want to run that script in a different computer where the directory with
+the data may be called differently.</p>
+<p>You can examine the first 6 rows of the loaded CSV file with the
+<code>head()</code> function as follows:</p>
 <pre><code>&gt; head(dat)
 
-        NOM      CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
-1 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         Si             NA
-2 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         No        594.686
-3 CATALUNYA CATALUNYA 2020-11-02 2020-11-08         --             NA
-4 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         No        619.898
-5 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         --             NA
-6 CATALUNYA CATALUNYA 2020-11-01 2020-11-07         Si             NA
-  R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCR_TAR
-1             NA 2841.0884            1420.5442             900    16604.584
-2       0.867578  685.4556             301.7109           23042     3113.298
-3             NA    0.0000               0.0000             533        0.000
-4       0.886494  699.2697             310.1696           23688     3157.961
-5             NA    0.0000               0.0000             547        0.000
-6             NA 2883.7047            1474.2092             934    16793.989
-     PCR   TAR PERC_PCR_TAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
-1   8445  2075                10.4716             112                5    151
-2 175816 61950                10.6273            1528              293    319
-3   3827   177                 7.0064              67               14      0
-4 179829 61348                10.7125            1566              294    321
-5   3846   166                 7.0666              71               14      0
-6   8552  2088                10.6121             119                5    143</code></pre>
-<p>It has two columns with date information (<code>DATA_INI</code> and <code>DATA_FI</code>), but which are stored as string characters (more specifically <em>factors</em>). However, R provides a way to store dates as such and this has the advantage that facilitates manipulating them for analysis purposes.</p>
-<p>For instance, to transform the two columns containing date data we should use the function <code>as.Date()</code> as follows:</p>
-<pre><code>&gt; startdate &lt;- as.Date(dat$DATA_INI)
-&gt; enddate &lt;- as.Date(dat$DATA_FI)</code></pre>
-<p>While R displays these objects as vectors of character strings, they do belong to a different class of objects, the class <em>Date</em>.</p>
+        NOM   CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
+1 CATALUNYA GLOBAL 2022-07-15 2022-07-21         No        187.601
+2 CATALUNYA GLOBAL 2022-07-15 2022-07-21         --             NA
+3 CATALUNYA GLOBAL 2022-07-15 2022-07-21         Si             NA
+4 CATALUNYA GLOBAL 2022-07-14 2022-07-20         --             NA
+5 CATALUNYA GLOBAL 2022-07-14 2022-07-20         Si             NA
+6 CATALUNYA GLOBAL 2022-07-14 2022-07-20         No        200.843
+  R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCRTAR
+1       0.724464  258.9509              96.5973            7517    532.9241
+2             NA    0.0000               0.0000             333      0.0000
+3             NA 1444.1909             511.7315             388   8435.6576
+4             NA    0.0000               0.0000             344      0.0000
+5             NA 1539.1514             526.2394             399   8899.9089
+6       0.720702  278.6764             104.7446            8151    556.1064
+    PCR   TAR PERC_PCRTAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
+1 23345 18126               26.9389            1170              115     95
+2  1945  1078               10.0000              78                5      0
+3  4947  1449               19.7034             119                1     35
+4  1966  1230                9.8637              95                5      0
+5  5370  1378               19.0199             118                1     45
+6 23921 19354               27.7685            1251              110    114
+  CASOS_PCR CASOS_TAR POSITIVITAT_PCR_NUM POSITIVITAT_TAR_NUM
+1      1869      5648                2054                4577
+2       141       192                 141                 150
+3       176       212                 181                 191
+4       155       189                 155                 149
+5       188       211                 195                 197
+6      2007      6144                2204                4930
+  POSITIVITAT_PCR_DEN POSITIVITAT_TAR_DEN VACUNATS_DOSI_1 VACUNATS_DOSI_2
+1               14209               10406             791            2962
+2                1863                1047              30               9
+3                1431                 457               4              13
+4                1882                1200              26               9
+5                1626                 435               7              12
+6               14574               11117             809            3046</code></pre>
+<p><strong>Exercise</strong>: now add to the script
+<code>covid19analysis.R</code> the following two lines to obtain a new
+<code>data.frame</code> object called <code>datg</code> that includes
+only data from the general population, i.e., excluding data from
+geriatric residences. You have to figure out the code that replaces de
+questions marks <code>??????</code>.</p>
+<pre><code>&gt; mask &lt;- ??????
++ datg &lt;- dat[mask, ]</code></pre>
+<p>Once you subset data, it is always convenient to compare the
+dimensions of the original and resulting object, using the function
+<code>dim()</code>, and think whether the difference in dimensions makes
+sense (e.g., subsetting should always lead to a smaller object in some
+dimension).</p>
+<h1 id="date-data-management">Date-data management</h1>
+<p>These are the first 6 rows of the filtered <code>data.frame</code>
+object you should have obtained from the previous exercise:</p>
+<pre><code>&gt; head(datg)
+
+         NOM   CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
+1  CATALUNYA GLOBAL 2022-07-15 2022-07-21         No        187.601
+6  CATALUNYA GLOBAL 2022-07-14 2022-07-20         No        200.843
+7  CATALUNYA GLOBAL 2022-07-13 2022-07-19         No        217.662
+12 CATALUNYA GLOBAL 2022-07-12 2022-07-18         No        237.641
+15 CATALUNYA GLOBAL 2022-07-11 2022-07-17         No        264.243
+16 CATALUNYA GLOBAL 2022-07-10 2022-07-16         No        275.007
+   R0_CONFIRMAT_M     IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCRTAR
+1        0.724464 258.9509              96.5973            7517    532.9241
+6        0.720702 278.6764             104.7446            8151    556.1064
+7        0.718076 303.1181             113.3544            8821    583.6323
+12       0.719925 330.0914             123.6991            9626    616.6453
+15       0.721174 366.4070             137.6162           10709    659.2191
+16       0.725143 379.2447             143.1934           11143    672.8920
+     PCR   TAR PERC_PCRTAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
+1  23345 18126               26.9389            1170              115     95
+6  23921 19354               27.7685            1251              110    114
+7  24735 20682               28.5630            1323              112    122
+12 25818 22168               29.5743            1371              111    121
+15 26955 24344               30.5689            1460              114    127
+16 27246 25117               30.9685            1498              114    142
+   CASOS_PCR CASOS_TAR POSITIVITAT_PCR_NUM POSITIVITAT_TAR_NUM
+1       1869      5648                2054                4577
+6       2007      6144                2204                4930
+7       2141      6680                2351                5355
+12      2317      7309                2569                5852
+15      2505      8204                2724                6598
+16      2573      8570                2794                6879
+   POSITIVITAT_PCR_DEN POSITIVITAT_TAR_DEN VACUNATS_DOSI_1 VACUNATS_DOSI_2
+1                14209               10406             791            2962
+6                14574               11117             809            3046
+7                15064               11915             788            3215
+12               15679               12795             790            3347
+15               16437               14058             785            3355
+16               16675               14560             818            3415</code></pre>
+<p>It has two columns with date information (<code>DATA_INI</code> and
+<code>DATA_FI</code>), corresponding to the begining and end of the
+7-day period of the data of that row, but which are stored as string
+character vectors (more specifically as <a
+href="https://funcompbio.github.io/lecture6/#25">factors</a>). However,
+R provides a way to store dates as such and this has the advantage that
+facilitates manipulating them for analysis purposes.</p>
+<p>For instance, to transform the two columns containing date data we
+should use the function <code>as.Date()</code> as follows:</p>
+<pre><code>&gt; startdate &lt;- as.Date(datg$DATA_INI)
+&gt; enddate &lt;- as.Date(datg$DATA_FI)</code></pre>
+<p>While R displays these objects as vectors of character strings, they
+do belong to a different class of objects, the class <em>Date</em>.</p>
 <pre><code>&gt; head(startdate)
 
-[1] &quot;2020-11-02&quot; &quot;2020-11-02&quot; &quot;2020-11-02&quot; &quot;2020-11-01&quot; &quot;2020-11-01&quot;
-[6] &quot;2020-11-01&quot;
+[1] &quot;2022-07-15&quot; &quot;2022-07-14&quot; &quot;2022-07-13&quot; &quot;2022-07-12&quot; &quot;2022-07-11&quot;
+[6] &quot;2022-07-10&quot;
 
 &gt; class(startdate)
 
@@ -67,19 +196,37 @@
 
 &gt; head(enddate)
 
-[1] &quot;2020-11-08&quot; &quot;2020-11-08&quot; &quot;2020-11-08&quot; &quot;2020-11-07&quot; &quot;2020-11-07&quot;
-[6] &quot;2020-11-07&quot;
+[1] &quot;2022-07-21&quot; &quot;2022-07-20&quot; &quot;2022-07-19&quot; &quot;2022-07-18&quot; &quot;2022-07-17&quot;
+[6] &quot;2022-07-16&quot;
 
 &gt; class(enddate)
 
 [1] &quot;Date&quot;</code></pre>
-<p>Having dates stored as <em>Date</em>-class objects facilitates operations on dates such as calculating time differences:</p>
+<p>Having dates stored as <em>Date</em>-class objects facilitates
+operations on dates such as calculating time differences:</p>
 <pre><code>&gt; head(enddate - startdate + 1)
 
 Time differences in days
 [1] 7 7 7 7 7 7</code></pre>
-<p>or extracting the month of each date:</p>
-<pre><code>&gt; m &lt;- months(startdate, abbreviate=TRUE)
+<p>or subsetting data for a period of time. For instance, let’s subset
+the data, selecting rows corresponding to data between January and
+November from 2020, the year in which the COVID19 pandemic started:</p>
+<pre><code>&gt; mask &lt;- startdate &gt;= as.Date(&quot;2020-01-01&quot;) &amp; enddate &lt;= as.Date(&quot;2020-11-30&quot;)
+&gt; sum(mask)
+
+[1] 275
+
+&gt; datg20 &lt;- datg[mask, ]
+&gt; dim(datg20)
+
+[1] 275  25</code></pre>
+<p>Note that the number of <code>TRUE</code> values in the logical mask
+matches the resulting number of rows in the subsetted object
+<code>datg20</code>.</p>
+<p>Date data also allows one to easily extract the month of each
+date:</p>
+<pre><code>&gt; startdate &lt;- as.Date(datg20$DATA_INI)
+&gt; m &lt;- months(startdate, abbreviate=TRUE)
 &gt; head(m)
 
 [1] &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot; &quot;Nov&quot;
@@ -87,22 +234,52 @@ Time differences in days
 &gt; class(m)
 
 [1] &quot;character&quot;</code></pre>
-<p>where we have to use the argument <code>abbreviate=TRUE</code> in the <code>months()</code> function to obtain a vector of equally sized character strings, which may be useful for visualization purposes.</p>
-<p><strong>Important:</strong> The previous vector <code>m</code> may contain the names of the months in a different language than English when the regional configuration of your operating system, known as <a href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale configuration</a>, is also different to English. In such a case, it may be handy to switch at least the regional time configuration to English, to facilitate following the rest of this practical. To do that, type the following instruction on the R shell:</p>
+<p>where we have to use the argument <code>abbreviate=TRUE</code> in the
+<code>months()</code> function to obtain a vector of equally sized
+character strings, which may be useful for visualization purposes.</p>
+<p><strong>Important:</strong> The previous vector <code>m</code> may
+contain the names of the months in a different language than English
+when the regional configuration of your operating system, known as <a
+href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale
+configuration</a>, is also different to English. In such a case, it may
+be handy to switch at least the regional time configuration to English,
+to facilitate following the rest of this practical. To do that, type the
+following instruction on the R shell:</p>
 <pre><code>&gt; Sys.setlocale(&quot;LC_TIME&quot;, &quot;C&quot;)</code></pre>
 <p>and then type again:</p>
 <pre><code>&gt; m &lt;- months(startdate, abbreviate=TRUE)</code></pre>
-<p>Verify that now the vector <code>m</code> has the month names in English.</p>
+<p>Verify that now the vector <code>m</code> has the month names in
+English.</p>
 <h1 id="factors">Factors</h1>
-<p>Factors in R are a class of objects that serve the purpose of storing what is known in statistics as a <a href="https://en.wikipedia.org/wiki/Categorical_variable">categorical variable</a>, which is a variable that takes values from a limited number of <em>categories</em>, also known as <em>levels</em>. So factors are pretty much like vectors of character strings, but with additional information about what are the different values that may occur on those vectors.</p>
-<p>Not all vectors of character strings are suitable to become factors. For instance, a vector of character strings corresponding to gene identifiers tipically should not become a factor in R, because those identifiers do not represent any kind of <em>category</em> grouping observations.</p>
-<p>Factors are useful, however, in the context of a statistical analysis and data visualization, involving categorical variables. To create a factor object we should call the function <code>factor()</code> giving a vector of character strings as argument. Let’s consider converting the previous vector <code>m</code> of character strings to a factor.</p>
+<p><a href="https://funcompbio.github.io/lecture6/#25">Factors</a> in R
+are a class of objects that serve the purpose of storing what is known
+in statistics as a <a
+href="https://en.wikipedia.org/wiki/Categorical_variable">categorical
+variable</a>, which is a variable that takes values from a limited
+number of <em>categories</em>, also known as <em>levels</em>. So factors
+are pretty much like vectors of character strings, but with additional
+information about what are the different values that may occur on those
+vectors.</p>
+<p>Not all vectors of character strings are suitable to become factors.
+For instance, a vector of character strings corresponding to gene
+identifiers tipically should not become a factor in R, because those
+identifiers do not represent any kind of <em>category</em> grouping
+observations.</p>
+<p>Factors are useful, however, in the context of a statistical analysis
+and data visualization, involving categorical variables. To create a
+factor object we should call the function <code>factor()</code> giving a
+vector of character strings as argument. Let’s consider converting the
+previous vector <code>m</code> of character strings to a factor.</p>
 <pre><code>&gt; mf &lt;- factor(m)
 &gt; head(mf)
 
 [1] Nov Nov Nov Nov Nov Nov
 Levels: Apr Aug Feb Jul Jun Mar May Nov Oct Sep</code></pre>
-<p>We can see that R displays factors differently to character strings, by showing the values without double quotes (<code>"</code>) and providing additional information about the possible <em>levels</em> of that factor. We can access the level information from a factor object with the functions <code>levels()</code> and <code>nlevels()</code>.</p>
+<p>We can see that R displays factors differently to character strings,
+by showing the values without double quotes (<code>"</code>) and
+providing additional information about the possible <em>levels</em> of
+that factor. We can access the level information from a factor object
+with the functions <code>levels()</code> and <code>nlevels()</code>.</p>
 <pre><code>&gt; levels(mf)
 
  [1] &quot;Apr&quot; &quot;Aug&quot; &quot;Feb&quot; &quot;Jul&quot; &quot;Jun&quot; &quot;Mar&quot; &quot;May&quot; &quot;Nov&quot; &quot;Oct&quot; &quot;Sep&quot;
@@ -110,7 +287,11 @@ Levels: Apr Aug Feb Jul Jun Mar May Nov Oct Sep</code></pre>
 &gt; nlevels(mf)
 
 [1] 10</code></pre>
-<p>Sometimes, we may want the levels of a factor to comprise a set of specific values or to be ordered in a specific way. This could be the case of the previous factor <code>mf</code>, where we would like for instance to have the levels corresponding to the months of the year. We can do that as follows:</p>
+<p>Sometimes, we may want the levels of a factor to comprise a set of
+specific values or to be ordered in a specific way. This could be the
+case of the previous factor <code>mf</code>, where we would like for
+instance to have the levels corresponding to the months of the year and
+chronologically ordered. We can do that as follows:</p>
 <pre><code>&gt; mf &lt;- factor(m, levels=c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;,
 +                          &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;))
 &gt; head(mf)
@@ -125,14 +306,24 @@ Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 &gt; nlevels(mf)
 
 [1] 12</code></pre>
-<p><strong>Important:</strong> The previous call to the <code>factor()</code> function will <strong>only work</strong> if your regional time configuration is English. If you are working with a non-English regional time configuration, you should change the level names in the argument <code>levels</code> to the language that you are using.</p>
-<p>Now, we can build a contingency table of the level occurrences of a factor using the function <code>table()</code>.</p>
+<p><strong>Important:</strong> The previous call to the
+<code>factor()</code> function will <strong>only work</strong> if your
+regional time configuration is English. If you are working with a
+non-English regional time configuration, you should change the level
+names in the argument <code>levels</code> to the language that you are
+using.</p>
+<p>Now, we can build a contingency table of the level occurrences of a
+factor using the function <code>table()</code>.</p>
 <pre><code>&gt; table(mf)
 
 mf
 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
-  0  18  93  90  93  90  93  93  90  93   6   0 </code></pre>
-<p>We can see, there is no data in 2020 for the months of January (because data was not yet recorded) and December (because it was November at the time of elaborating this practical). We can remove levels of a factor for which there is no data with the function <code>droplevels()</code>.</p>
+  0   6  31  30  31  30  31  31  30  31  24   0 </code></pre>
+<p>We can see, there is no data in 2020 for the months of January
+(because data was not yet recorded) and December (because it is outside
+the period we have subsetted the data). We can remove levels of a factor
+for which there is no data with the function
+<code>droplevels()</code>.</p>
 <pre><code>&gt; mf &lt;- droplevels(mf)
 &gt; levels(mf)
 
@@ -142,16 +333,47 @@ Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
 mf
 Feb Mar Apr May Jun Jul Aug Sep Oct Nov 
- 18  93  90  93  90  93  93  90  93   6 </code></pre>
-<p>Add the necessary lines of code to the script <code>covid19analysis.R</code> to create a factor object with the months in which each data row was recorded in the general population, i.e., excluding data from geriatric residences. Using this factor we can easily visualize the distribution of the columns <code>R0_CONFIRMAT_M</code> (R0 basic reproduction number) and <code>IEPG_CONFIRMAT</code> (risk of outbreak) in the general population, as function of the month, calling plot with the formula notation <code>x ~ y</code>:</p>
-<pre><code>&gt; plot(datg$R0_CONFIRMAT_M ~ mf)</code></pre>
-<p><img src="R0byMonth-1.png" /> where here <code>datg</code> refers to the subset of the original <code>data.frame</code> object <code>dat</code>, excluding data from geriatric residences, and <code>mf</code> refers to the factor object with the months from that subset of data. The resulting plot contains so-called <a href="https://en.wikipedia.org/wiki/Box_plot">box plots</a> for each month, which allow to visualize the location of the data in terms of <a href="https://en.wikipedia.org/wiki/Quartile">quartiles</a>.</p>
-<p>Once you have obtained the plot, look up in the help page of the <code>plot()</code> function, how can you change the labels for the <code>x</code> and <code>y</code> axes to a more readable label. The resulting plot should be similar to the one above</p>
-<p>We can see that February has no data points for the column <code>R0_CONFIRMAT_M</code> despite there are data rows for that month. To find out why we do not see any data on the plot we can inspect the values of <code>R0_CONFIRMAT_M</code> for the month of February as follows:</p>
-<pre><code>&gt; datg$R0_CONFIRMAT_M[mf == &quot;Feb&quot;]
+  6  31  30  31  30  31  31  30  31  24 </code></pre>
+<p>Using this factor we can easily visualize the distribution of the
+column <code>R0_CONFIRMAT_M</code> (<a
+href="https://en.wikipedia.org/wiki/Basic_reproduction_number">R0 basic
+reproduction number</a>) as function of the month, calling plot with the
+formula notation <code>x ~ y</code> (add this plotting instruction to
+the <code>covid19analysis.R</code> script):</p>
+<pre><code>&gt; plot(datg20$R0_CONFIRMAT_M ~ mf)</code></pre>
+<p><img src="R0byMonth-1.png" /></p>
+<p>where here <code>datg20</code> refers to the subset of the original
+<code>data.frame</code> object <code>dat</code>, excluding data from
+geriatric residences and including only data between January and
+November 2020, and <code>mf</code> refers to the factor object with the
+months from that subset of data. The resulting plot contains so-called
+<a href="https://en.wikipedia.org/wiki/Box_plot">box plots</a> for each
+month, which allow to visualize the location of the data in terms of <a
+href="https://en.wikipedia.org/wiki/Quartile">quartiles</a>.</p>
+<p>We can see that February has no data points for the column
+<code>R0_CONFIRMAT_M</code> despite there are data rows for that month.
+To find out why we do not see any data on the plot we can inspect the
+values of <code>R0_CONFIRMAT_M</code> for the month of February as
+follows:</p>
+<pre><code>&gt; mask &lt;- mf == &quot;Feb&quot;
+&gt; datg20$R0_CONFIRMAT_M[mask]
 
 [1] NA NA NA NA NA NA</code></pre>
-<p>The value <code>NA</code> in R means <em>not available</em> and R treats it in a special way depending on the operation that is performing. In the case of plots, <code>NA</code> values are ignored.</p>
-<p>Plot now the risk of outbreak as function of the month, can you identify the month in which this risk has increased the most? Add the two plotting instructions to the <code>covid19analysis.R</code> script.</p>
+<p>The value <code>NA</code> in R means <em>not available</em> and R
+treats it in a special way depending on the operation that is
+performing. In the case of plots, <code>NA</code> values are
+ignored.</p>
+<p><strong>Exercise:</strong> look up in the help page of the
+<code>plot()</code> function, how can you change the labels for the
+<code>x</code> and <code>y</code> axes to a readable label whose meaning
+stands alone and minimally describes the data visualized in that axis.
+The resulting plot should be identical to the one above, but with the
+axes labels changed.</p>
+<p><strong>Exercise:</strong> produce the same kind of plot, but this
+time showing in the <em>y</em>-axis the values of the column
+<code>IEPG_CONFIRMAT</code>, corresponding to the <a
+href="https://doi.org/10.1371/journal.pone.0243701">effective potential
+growth</a> also known as risk of outbreak. Can you identify the month in
+which this risk has increased the most?</p>
 <pre><code>&gt; ## plot risk of outbreak as function of the month
-&gt; plot(datg$IEPG_CONFIRMAT ~ mf, xlab=&quot;Month&quot;, ylab=&quot;Risk of outbreak&quot;)</code></pre>
+&gt; plot(datg20$IEPG_CONFIRMAT ~ mf, xlab=&quot;Month&quot;, ylab=&quot;Risk of outbreak&quot;)</code></pre>
