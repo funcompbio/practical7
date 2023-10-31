@@ -28,28 +28,11 @@ and RStudio in your system. For a smooth development of this practical, it is
 strongly recommended that you follow and finish the previous
 [seminar 4](/seminar4/) on how to get started with R and RStudio.
 
-We will download some COVID19 data to illustrate the use of R and RStudio.
-Please follow the next two steps:
-
-1. Go to the Catalan Health Departament COVID19 data portal at
-   [https://dadescovid.cat](https://dadescovid.cat) and switch the language to
-   "ENGLISH" using the pull-down menu on the top-right corner of the page.
-2. Follow the downloads link and on the next page click and download the file
-   corresponding to the "7 DAY AGGREGATION" for "CATALUNYA".
-   Make sure you know exactly where in your filesystem this file
-   has been downloaded. **Tip:** some browsers automatically download files
-   into a folder called "Downloads" or under a name corresponding to the
-   translation of "Downloads" to the default language of your operating system.
-3. Make a directory in your filesystem, for instance at your _home_ directory,
-   called `practical7` and copy in it the downloaded file.
-4. Since the downloaded file is a ZIP file, uncompress as you did in
-   [practical 1](/practical1/) so that you finally have a file called
-   `catalunya_setmanal.csv` in the directory `practical7`.
-
-If you are using the UPF [myapps](https://myapps.upf.edu) cloud to run RStudio,
-then you need to either use an internet browser in _myapps_ to download the data
-file directly in the _myapps_ cloud or upload to the _myapps_ cloud the file
-that you have downloaded in your own computer.
+We will use the data files called `mostres_analitzades.csv` and
+`virus_detectats.csv` that were generated in the
+[first practical](/practical1/). If you don't have these files, please review
+that practical and generate them again. Once you have obtained those two files,
+copy them into a fresh new directory called `practical7`.
 
 # Writing R scripts
 
@@ -74,26 +57,29 @@ the following two lines to read the CSV file downloaded in the previous section.
 The first line is a comment. Lines starting with the `#` symbol are comments in R.
 
 ```{r}
-## read COVID19 data
-dat <- read.csv("catalunya_setmanal.csv", sep=";", stringsAsFactors=TRUE)
+## read SIVIC data
+dat <- read.csv("mostres_analitzades.csv", stringsAsFactors=TRUE)
 ```
 
 Now save the R script in the directory `practical7` under the filename
-`covid19analysis.R`.
+`sivicanalysis.R`.
 
 To execute a specific line of an R script in RStudio you should move the cursor
 to that line in the pane with the script file and press the key combination
-`Ctrl+Enter`. Alternatively, you can also copy and paste the line from the script
-to the R shell, specially if you are not working with RStudio.
+`Ctrl+Enter` (`Cmd+Enter` in Apple computers). Alternatively, you can also copy
+and paste the line from the script to the R shell, specially if you are not
+working with RStudio.
 
-The previous line may produce an error if the current working directory of
-R is not pointing to the directory where the file `catalunya_setmanal.csv` is;
-see previous [seminar 4](/seminar4/) if you need to find out how to change
-the working directory in R and RStudio. In general, changing the working directory
-should be always performed in the R shell and **NEVER** include the instruction that
-changes the working directory in an R script. The reason is because you or somebody
-else may want to run that script in a different computer where the directory with
-the data may be called differently.
+The previous line may produce an error if the current working directory of R is
+not pointing to the directory where the file `.csv` is; see previous
+[seminar 4](/seminar4/) if you need to find out how to change the working
+directory in R and RStudio.
+
+In general, changing the working directory should be always performed in the R
+shell and **NEVER** include the instruction that changes the working directory
+in an R script. The reason is because you or somebody else may want to run that
+script in a different computer where the directory with the data may be called
+differently.
 
 You can examine the first 6 rows of the loaded CSV file with the `head()` function
 as follows:
@@ -102,52 +88,51 @@ as follows:
 head(dat)
 ```
 
-**Exercise**: now add to the script `covid19analysis.R` the following two lines
-to obtain a new `data.frame` object called `datg` that includes only data from
-the general population, i.e., excluding data from geriatric residences. You have
-to figure out the code that replaces de questions marks `??????`.
+**Exercise**: tabulate the values of the column `sexe` with the function
+`table()`. Add to the script `sivicanalysis.R` the following two lines
+to obtain a new `data.frame` object called `dat2` that excludes rows where
+the value in the column `sexe` is `No disponible`. You have to figure out the
+code that replaces de questions marks `??????`.
 
 ```{r eval=FALSE}
 mask <- ??????
-datg <- dat[mask, ]
+dat2 <- dat[mask, ]
 ```
-
-Once you subset data, it is always convenient to compare the dimensions of the
-original and resulting object, using the function `dim()`, and think whether the
-difference in dimensions makes sense (e.g., subsetting should always lead to a
-smaller object in some dimension).
+Once you subset data, it is always convenient to compare the dimensions
+of the original and resulting object, using the function `dim()`, and
+think whether the difference in dimensions makes sense (e.g., subsetting
+should always lead to a smaller object in some dimension), and whether
+the number of rows in this case matches the number of `TRUE` values in the
+logical mask.
 
 ```{r include=FALSE}
-mask <- dat$RESIDENCIA == "No"
-datg <- dat[mask, ]
+mask <- dat$sexe != "No disponible"
+dat2 <- dat[mask, ]
 ```
 
 # Date-data management
 
-These are the first 6 rows of the filtered `data.frame` object you should have
-obtained from the previous exercise:
-
-```{r}
-head(datg)
-```
-
-It has two columns with date information (`DATA_INI` and `DATA_FI`),
-corresponding to the begining and end of the 7-day period of the data of that
-row, but which are stored as string character vectors (more specifically as
-[factors](https://funcompbio.github.io/lecture6/#25)). However, R provides a
-way to store dates as such and this has the advantage that facilitates
-manipulating them for analysis purposes.
+These data have two columns called `data_inici` and `data_final` that
+corresponding to the begining and end of the 7-day period of the data of
+that row, but which are stored as string character vectors (more
+specifically as [factors](https://funcompbio.github.io/lecture6/#25)).
+However, R provides a way to store dates as such and this has the
+advantage that facilitates manipulating them for analysis purposes.
 
 For instance, to transform the two columns containing date data we should
 use the function `as.Date()` as follows:
 
 ```{r}
-startdate <- as.Date(datg$DATA_INI)
-enddate <- as.Date(datg$DATA_FI)
+startdate <- as.Date(dat2$data_inici, "%d/%m/%Y")
+enddate <- as.Date(dat2$data_final, "%d/%m/%Y")
 ```
 
-While R displays these objects as vectors of character strings, they do belong
-to a different class of objects, the class _Date_.
+Here the second argument informs the function `as.Date()` about the format
+of the input dates, in this case, _day/month/4-digit-year_ corresponding to
+the format string `"%d/%m/%Y`. The help page of `as.Date()` contains full
+details about this. While R displays these objects as vectors of character
+strings in the format _4-digit-year-month-day_, they do belong to a different
+class of objects, the class *Date*.
 
 ```{r}
 head(startdate)
@@ -160,29 +145,39 @@ class(enddate)
 Having dates stored as _Date_-class objects facilitates operations on dates such
 as calculating time differences:
 
+1. Calculating time differences:
+
 ```{r}
 head(enddate - startdate + 1)
 ```
 
-or subsetting data for a period of time. For instance, let's subset the data,
-selecting rows corresponding to data between January and November from 2020,
-the year in which the COVID19 pandemic started:
+Caculating earliest and latest time with the `min()` and `max()` functions:
 
 ```{r}
-mask <- startdate >= as.Date("2020-01-01") & enddate <= as.Date("2020-11-30")
+min(startdate)
+max(startdate)
+```
+
+3. Subsetting data for a period of time. For instance, let’s subset the
+data, selecting rows corresponding to the last academic year from September
+2022 to June 2023:
+
+```{r}
+mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
 sum(mask)
-datg20 <- datg[mask, ]
-dim(datg20)
+dat2yr2223 <- dat2[mask, ]
+dim(dat2yr2223)
 ```
 
 Note that the number of `TRUE` values in the logical mask matches the resulting
-number of rows in the subsetted object `datg20`.
+number of rows in the subsetted object `dat2yr2223`.
 
-
-Date data also allows one to easily extract the month of each date:
+Date data also allows one to easily extract the month of each date. Let's extract
+again the starting date this time for the subsetted data, and see how do we get
+the months from those dates:
 
 ```{r}
-startdate <- as.Date(datg20$DATA_INI)
+startdate <- as.Date(dat2yr2223$data_inici, "%d/%m/%Y")
 m <- months(startdate, abbreviate=TRUE)
 head(m)
 class(m)
@@ -246,6 +241,10 @@ level information from a factor object with the functions `levels()` and
 levels(mf)
 nlevels(mf)
 ```
+Note that we have 10 levels instead of 12, because the subsetted data
+includes only the months corresponding to the academic year, i.e., from
+September to June.
+
 Sometimes, we may want the levels of a factor to comprise a set of specific
 values or to be ordered in a specific way. This could be the case of the
 previous factor `mf`, where we would like for instance to have the
@@ -270,10 +269,8 @@ using the function `table()`.
 ```{r}
 table(mf)
 ```
-We can see, there is no data in 2020 for the months of January (because
-data was not yet recorded) and December (because it is outside the period
-we have subsetted the data). We can remove levels of a factor for which there
-is no data with the function `droplevels()`.
+We can see, there is no data for the months of July and August. We can remove
+levels of a factor for which there is no data with the function `droplevels()`.
 
 ```{r}
 mf <- droplevels(mf)
@@ -281,36 +278,37 @@ levels(mf)
 table(mf)
 ```
 
-Using this factor we can easily visualize the distribution of the column
-`R0_CONFIRMAT_M`
-([R0 basic reproduction number](https://en.wikipedia.org/wiki/Basic_reproduction_number))
-as function of the month, calling plot with the formula notation `x ~ y`
-(add this plotting instruction to the `covid19analysis.R` script):
-
-```{r R0byMonth}
-plot(datg20$R0_CONFIRMAT_M ~ mf)
-```
-
-where here `datg20` refers to the subset of the original `data.frame`
-object `dat`, excluding data from geriatric residences and including only
-data between January and November 2020, and `mf` refers to the factor object
-with the months from that subset of data. The resulting
-plot contains so-called [box plots](https://en.wikipedia.org/wiki/Box_plot)
-for each month, which allow to visualize the location of the data in terms
-of [quartiles](https://en.wikipedia.org/wiki/Quartile).
-
-We can see that February has no data points for the column `R0_CONFIRMAT_M`
-despite there are data rows for that month. To find out why we do not see
-any data on the plot we can inspect the values of `R0_CONFIRMAT_M` for
-the month of February as follows:
+One of the common uses of a factor is to aggregate numerical values by the
+levels of that factor. For instance, in our previous data, the column
+`positiu` contains the number of positively tested individuals, but each value
+in that column corresponds to the number per week, region, sex, age group and
+socioeconomical index. Let's say we want to aggregate those positively tested
+individuals per month in the `data.frame` object `dat2yr2223`. We can use the
+function `aggregate()` for that purpose, as follows:
 
 ```{r}
-mask <- mf == "Feb"
-datg20$R0_CONFIRMAT_M[mask]
+posbymonth <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
 ```
-The value `NA` in R means _not available_ and R treats it in a special
-way depending on the operation that is performing. In the case of plots, `NA`
-values are ignored.
+
+Here the first argument is the vector (column of `dat2yr2223` in this case)
+with numerical values that we want to aggregate, the second argument is a
+`list` object with one element for each factor whose levels we want to use
+to group the values, and the third argument is the function we want to use
+to summarize the data per group. The result is a `data.frame` object with
+one column per factor and a final column called `x` with the aggregate values:
+
+```{r}
+posbymonth
+```
+
+We can visualize these data in a
+[scatter plot](https://en.wikipedia.org/wiki/Scatter_plot) by converting
+the factor into an integer, and plotting the month into the x-axis and
+the numerical value into the y-axis:
+
+```{r posbymonth}
+plot(as.integer(posbymonth$month), posbymonth$x, type="b")
+```
 
 **Exercise:** look up in the help page of the `plot()` function, how can you
 change the labels for the `x` and `y` axes to a readable label whose meaning
@@ -318,13 +316,24 @@ stands alone and minimally describes the data visualized in that axis. The
 resulting plot should be identical to the one above, but with the axes labels
 changed.
 
-**Exercise:** produce the same kind of plot, but this time showing in the
-_y_-axis the values of the column `IEPG_CONFIRMAT`, corresponding to the
-[effective potential growth](https://doi.org/10.1371/journal.pone.0243701)
-also known as risk of outbreak. Can you identify the month in which this risk
-has increased the most?
+**Exercise:** Repeat the same plot, but instead of aggregating the number
+of positive cases, aggregate the positive rate by first calculating it
+using the columns `total` and `positiu`, and then using the `mean()`
+function to aggregate the values. Can you interpret the resulting plot?
+
+**Exercise:** Aggregate again the positive rate as in the previous exercise,
+but this time by two factors, month and age group (look up in the
+`data.frame` object `dat2yr2223` which column may store the age group). Assuming
+the result of the function `aggregate()` is stored into a `data.frame` object
+called `posrbymonthage`, plot the aggregated positive rate as function of the
+month using the following plotting instruction:
 
 ```{r eval=FALSE}
-## plot risk of outbreak as function of the month
-plot(datg20$IEPG_CONFIRMAT ~ mf, xlab="Month", ylab="Risk of outbreak")
+plot(posrbymonthage$x ~ posrbymontage$month, xlab="Month", ylab="Positive rate")
 ```
+
+The resulting plot contains so-called
+[box plots](https://en.wikipedia.org/wiki/Box_plot) for each month, which allow
+one to visualize the location and spread of the data in terms of
+[quartiles](https://en.wikipedia.org/wiki/Quartile). How would you interpret the
+different sizes of the boxes throughout the months of the year?

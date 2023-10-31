@@ -1,4 +1,5 @@
-# Objectives
+Objectives
+==========
 
 The learning objectives for this practical are:
 
@@ -6,7 +7,8 @@ The learning objectives for this practical are:
 -   How to manipulate dates in data.
 -   How to create and use factor objects.
 
-# Setup and background
+Setup and background
+====================
 
 To do this practical you need an installation of R and RStudio. You can
 find the instructions in the [setup](/setup#r-and-rstudio) link on how
@@ -15,31 +17,14 @@ this practical, it is strongly recommended that you follow and finish
 the previous [seminar 4](/seminar4/) on how to get started with R and
 RStudio.
 
-We will download some COVID19 data to illustrate the use of R and
-RStudio. Please follow the next two steps:
+We will use the data files called `mostres_analitzades.csv` and
+`virus_detectats.csv` that were generated in the [first
+practical](/practical1/). If you don’t have these files, please review
+that practical and generate them again. Once you have obtained those two
+files, copy them into a fresh new directory called `practical7`.
 
-1.  Go to the Catalan Health Departament COVID19 data portal at
-    <https://dadescovid.cat> and switch the language to “ENGLISH” using
-    the pull-down menu on the top-right corner of the page.
-2.  Follow the downloads link and on the next page click and download
-    the file corresponding to the “7 DAY AGGREGATION” for “CATALUNYA”.
-    Make sure you know exactly where in your filesystem this file has
-    been downloaded. **Tip:** some browsers automatically download files
-    into a folder called “Downloads” or under a name corresponding to
-    the translation of “Downloads” to the default language of your
-    operating system.
-3.  Make a directory in your filesystem, for instance at your *home*
-    directory, called `practical7` and copy in it the downloaded file.
-4.  Since the downloaded file is a ZIP file, uncompress as you did in
-    [practical 1](/practical1/) so that you finally have a file called
-    `catalunya_setmanal.csv` in the directory `practical7`.
-
-If you are using the UPF [myapps](https://myapps.upf.edu) cloud to run
-RStudio, then you need to either use an internet browser in *myapps* to
-download the data file directly in the *myapps* cloud or upload to the
-*myapps* cloud the file that you have downloaded in your own computer.
-
-# Writing R scripts
+Writing R scripts
+=================
 
 We may often use an interactive R session to quickly examine data or
 make some straightforward calculations. In such an interactive session,
@@ -63,22 +48,23 @@ RStudio) the following two lines to read the CSV file downloaded in the
 previous section. The first line is a comment. Lines starting with the
 `#` symbol are comments in R.
 
-    > ## read COVID19 data
-    > dat <- read.csv("catalunya_setmanal.csv", sep=";", stringsAsFactors=TRUE)
+    > ## read SIVIC data
+    > dat <- read.csv("mostres_analitzades.csv", stringsAsFactors=TRUE)
 
 Now save the R script in the directory `practical7` under the filename
-`covid19analysis.R`.
+`sivicanalysis.R`.
 
 To execute a specific line of an R script in RStudio you should move the
 cursor to that line in the pane with the script file and press the key
-combination `Ctrl+Enter`. Alternatively, you can also copy and paste the
-line from the script to the R shell, specially if you are not working
-with RStudio.
+combination `Ctrl+Enter` (`Cmd+Enter` in Apple computers).
+Alternatively, you can also copy and paste the line from the script to
+the R shell, specially if you are not working with RStudio.
 
 The previous line may produce an error if the current working directory
-of R is not pointing to the directory where the file
-`catalunya_setmanal.csv` is; see previous [seminar 4](/seminar4/) if you
-need to find out how to change the working directory in R and RStudio.
+of R is not pointing to the directory where the file `.csv` is; see
+previous [seminar 4](/seminar4/) if you need to find out how to change
+the working directory in R and RStudio.
+
 In general, changing the working directory should be always performed in
 the R shell and **NEVER** include the instruction that changes the
 working directory in an R script. The reason is because you or somebody
@@ -90,100 +76,48 @@ You can examine the first 6 rows of the loaded CSV file with the
 
     > head(dat)
 
-            NOM   CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
-    1 CATALUNYA GLOBAL 2022-07-15 2022-07-21         No        187.601
-    2 CATALUNYA GLOBAL 2022-07-15 2022-07-21         --             NA
-    3 CATALUNYA GLOBAL 2022-07-15 2022-07-21         Si             NA
-    4 CATALUNYA GLOBAL 2022-07-14 2022-07-20         --             NA
-    5 CATALUNYA GLOBAL 2022-07-14 2022-07-20         Si             NA
-    6 CATALUNYA GLOBAL 2022-07-14 2022-07-20         No        200.843
-      R0_CONFIRMAT_M      IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCRTAR
-    1       0.724464  258.9509              96.5973            7517    532.9241
-    2             NA    0.0000               0.0000             333      0.0000
-    3             NA 1444.1909             511.7315             388   8435.6576
-    4             NA    0.0000               0.0000             344      0.0000
-    5             NA 1539.1514             526.2394             399   8899.9089
-    6       0.720702  278.6764             104.7446            8151    556.1064
-        PCR   TAR PERC_PCRTAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
-    1 23345 18126               26.9389            1170              115     95
-    2  1945  1078               10.0000              78                5      0
-    3  4947  1449               19.7034             119                1     35
-    4  1966  1230                9.8637              95                5      0
-    5  5370  1378               19.0199             118                1     45
-    6 23921 19354               27.7685            1251              110    114
-      CASOS_PCR CASOS_TAR POSITIVITAT_PCR_NUM POSITIVITAT_TAR_NUM
-    1      1869      5648                2054                4577
-    2       141       192                 141                 150
-    3       176       212                 181                 191
-    4       155       189                 155                 149
-    5       188       211                 195                 197
-    6      2007      6144                2204                4930
-      POSITIVITAT_PCR_DEN POSITIVITAT_TAR_DEN VACUNATS_DOSI_1 VACUNATS_DOSI_2
-    1               14209               10406             791            2962
-    2                1863                1047              30               9
-    3                1431                 457               4              13
-    4                1882                1200              26               9
-    5                1626                 435               7              12
-    6               14574               11117             809            3046
+      setmana_epidemiologica  any data_inici data_final codi_regio
+    1                     19 2023 08/05/2023 14/05/2023         67
+    2                     25 2022 20/06/2022 26/06/2022         64
+    3                     19 2023 08/05/2023 14/05/2023         78
+    4                     42 2023 16/10/2023 22/10/2023         78
+    5                     19 2023 08/05/2023 14/05/2023         78
+    6                     20 2023 15/05/2023 21/05/2023         78
+              nom_regio codi_ambit          nom_ambit sexe grup_edat
+    1 CATALUNYA CENTRAL       6700  CATALUNYA CENTRAL Dona   20 a 24
+    2            GIRONA       6400             GIRONA Home     3 i 4
+    3         BARCELONA       7802 METROPOLITANA NORD Dona   20 a 24
+    4         BARCELONA       7802 METROPOLITANA NORD Home   15 a 19
+    5         BARCELONA       7802 METROPOLITANA NORD Dona   40 a 44
+    6         BARCELONA       7801  METROPOLITANA SUD Dona   65 a 69
+      index_socioeconomic total positiu
+    1                   3     1       0
+    2                   3     1       1
+    3                   4     1       1
+    4                   4     2       1
+    5                   3     3       2
+    6                   2     1       1
 
-**Exercise**: now add to the script `covid19analysis.R` the following
-two lines to obtain a new `data.frame` object called `datg` that
-includes only data from the general population, i.e., excluding data
-from geriatric residences. You have to figure out the code that replaces
-de questions marks `??????`.
+**Exercise**: tabulate the values of the column `sexe` with the function
+`table()`. Add to the script `sivicanalysis.R` the following two lines
+to obtain a new `data.frame` object called `dat2` that excludes rows
+where the value in the column `sexe` is `No disponible`. You have to
+figure out the code that replaces de questions marks `??????`.
 
     > mask <- ??????
-    + datg <- dat[mask, ]
+    + dat2 <- dat[mask, ]
 
 Once you subset data, it is always convenient to compare the dimensions
 of the original and resulting object, using the function `dim()`, and
 think whether the difference in dimensions makes sense (e.g., subsetting
-should always lead to a smaller object in some dimension).
+should always lead to a smaller object in some dimension), and whether
+the number of rows in this case matches the number of `TRUE` values in
+the logical mask.
 
-# Date-data management
+Date-data management
+====================
 
-These are the first 6 rows of the filtered `data.frame` object you
-should have obtained from the previous exercise:
-
-    > head(datg)
-
-             NOM   CODI   DATA_INI    DATA_FI RESIDENCIA IEPG_CONFIRMAT
-    1  CATALUNYA GLOBAL 2022-07-15 2022-07-21         No        187.601
-    6  CATALUNYA GLOBAL 2022-07-14 2022-07-20         No        200.843
-    7  CATALUNYA GLOBAL 2022-07-13 2022-07-19         No        217.662
-    12 CATALUNYA GLOBAL 2022-07-12 2022-07-18         No        237.641
-    15 CATALUNYA GLOBAL 2022-07-11 2022-07-17         No        264.243
-    16 CATALUNYA GLOBAL 2022-07-10 2022-07-16         No        275.007
-       R0_CONFIRMAT_M     IA14 TAXA_CASOS_CONFIRMAT CASOS_CONFIRMAT TAXA_PCRTAR
-    1        0.724464 258.9509              96.5973            7517    532.9241
-    6        0.720702 278.6764             104.7446            8151    556.1064
-    7        0.718076 303.1181             113.3544            8821    583.6323
-    12       0.719925 330.0914             123.6991            9626    616.6453
-    15       0.721174 366.4070             137.6162           10709    659.2191
-    16       0.725143 379.2447             143.1934           11143    672.8920
-         PCR   TAR PERC_PCRTAR_POSITIVES INGRESSOS_TOTAL INGRESSOS_CRITIC EXITUS
-    1  23345 18126               26.9389            1170              115     95
-    6  23921 19354               27.7685            1251              110    114
-    7  24735 20682               28.5630            1323              112    122
-    12 25818 22168               29.5743            1371              111    121
-    15 26955 24344               30.5689            1460              114    127
-    16 27246 25117               30.9685            1498              114    142
-       CASOS_PCR CASOS_TAR POSITIVITAT_PCR_NUM POSITIVITAT_TAR_NUM
-    1       1869      5648                2054                4577
-    6       2007      6144                2204                4930
-    7       2141      6680                2351                5355
-    12      2317      7309                2569                5852
-    15      2505      8204                2724                6598
-    16      2573      8570                2794                6879
-       POSITIVITAT_PCR_DEN POSITIVITAT_TAR_DEN VACUNATS_DOSI_1 VACUNATS_DOSI_2
-    1                14209               10406             791            2962
-    6                14574               11117             809            3046
-    7                15064               11915             788            3215
-    12               15679               12795             790            3347
-    15               16437               14058             785            3355
-    16               16675               14560             818            3415
-
-It has two columns with date information (`DATA_INI` and `DATA_FI`),
+These data have two columns called `data_inici` and `data_final` that
 corresponding to the begining and end of the 7-day period of the data of
 that row, but which are stored as string character vectors (more
 specifically as [factors](https://funcompbio.github.io/lecture6/#25)).
@@ -193,16 +127,21 @@ advantage that facilitates manipulating them for analysis purposes.
 For instance, to transform the two columns containing date data we
 should use the function `as.Date()` as follows:
 
-    > startdate <- as.Date(datg$DATA_INI)
-    > enddate <- as.Date(datg$DATA_FI)
+    > startdate <- as.Date(dat2$data_inici, "%d/%m/%Y")
+    > enddate <- as.Date(dat2$data_final, "%d/%m/%Y")
 
-While R displays these objects as vectors of character strings, they do
-belong to a different class of objects, the class *Date*.
+Here the second argument informs the function `as.Date()` about the
+format of the input dates, in this case, *day/month/4-digit-year*
+corresponding to the format string `"%d/%m/%Y`. The help page of
+`as.Date()` contains full details about this. While R displays these
+objects as vectors of character strings in the format
+*4-digit-year-month-day*, they do belong to a different class of
+objects, the class *Date*.
 
     > head(startdate)
 
-    [1] "2022-07-15" "2022-07-14" "2022-07-13" "2022-07-12" "2022-07-11"
-    [6] "2022-07-10"
+    [1] "2023-05-08" "2022-06-20" "2023-05-08" "2023-10-16" "2023-05-08"
+    [6] "2023-05-15"
 
     > class(startdate)
 
@@ -210,8 +149,8 @@ belong to a different class of objects, the class *Date*.
 
     > head(enddate)
 
-    [1] "2022-07-21" "2022-07-20" "2022-07-19" "2022-07-18" "2022-07-17"
-    [6] "2022-07-16"
+    [1] "2023-05-14" "2022-06-26" "2023-05-14" "2023-10-22" "2023-05-14"
+    [6] "2023-05-21"
 
     > class(enddate)
 
@@ -220,35 +159,54 @@ belong to a different class of objects, the class *Date*.
 Having dates stored as *Date*-class objects facilitates operations on
 dates such as calculating time differences:
 
+1.  Calculating time differences:
+
+<!-- -->
+
     > head(enddate - startdate + 1)
 
     Time differences in days
     [1] 7 7 7 7 7 7
 
-or subsetting data for a period of time. For instance, let’s subset the
-data, selecting rows corresponding to data between January and November
-from 2020, the year in which the COVID19 pandemic started:
+Caculating earliest and latest time with the `min()` and `max()`
+functions:
 
-    > mask <- startdate >= as.Date("2020-01-01") & enddate <= as.Date("2020-11-30")
+    > min(startdate)
+
+    [1] "2022-05-09"
+
+    > max(startdate)
+
+    [1] "2023-10-16"
+
+1.  Subsetting data for a period of time. For instance, let’s subset the
+    data, selecting rows corresponding to the last academic year from
+    September 2022 to June 2023:
+
+<!-- -->
+
+    > mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
     > sum(mask)
 
-    [1] 275
+    [1] 9833
 
-    > datg20 <- datg[mask, ]
-    > dim(datg20)
+    > dat2yr2223 <- dat2[mask, ]
+    > dim(dat2yr2223)
 
-    [1] 275  25
+    [1] 9833   13
 
 Note that the number of `TRUE` values in the logical mask matches the
-resulting number of rows in the subsetted object `datg20`.
+resulting number of rows in the subsetted object `dat2yr2223`.
 
-Date data also allows one to easily extract the month of each date:
+Date data also allows one to easily extract the month of each date.
+Let’s extract again the starting date this time for the subsetted data,
+and see how do we get the months from those dates:
 
-    > startdate <- as.Date(datg20$DATA_INI)
+    > startdate <- as.Date(dat2yr2223$data_inici, "%d/%m/%Y")
     > m <- months(startdate, abbreviate=TRUE)
     > head(m)
 
-    [1] "Nov" "Nov" "Nov" "Nov" "Nov" "Nov"
+    [1] "May" "May" "May" "May" "May" "May"
 
     > class(m)
 
@@ -275,7 +233,8 @@ and then type again:
 
 Verify that now the vector `m` has the month names in English.
 
-# Factors
+Factors
+=======
 
 [Factors](https://funcompbio.github.io/lecture6/#25) in R are a class of
 objects that serve the purpose of storing what is known in statistics as
@@ -301,8 +260,8 @@ vector `m` of character strings to a factor.
     > mf <- factor(m)
     > head(mf)
 
-    [1] Nov Nov Nov Nov Nov Nov
-    Levels: Apr Aug Feb Jul Jun Mar May Nov Oct Sep
+    [1] May May May May May May
+    Levels: Apr Dec Feb Jan Jun Mar May Nov Oct Sep
 
 We can see that R displays factors differently to character strings, by
 showing the values without double quotes (`"`) and providing additional
@@ -312,11 +271,15 @@ and `nlevels()`.
 
     > levels(mf)
 
-     [1] "Apr" "Aug" "Feb" "Jul" "Jun" "Mar" "May" "Nov" "Oct" "Sep"
+     [1] "Apr" "Dec" "Feb" "Jan" "Jun" "Mar" "May" "Nov" "Oct" "Sep"
 
     > nlevels(mf)
 
     [1] 10
+
+Note that we have 10 levels instead of 12, because the subsetted data
+includes only the months corresponding to the academic year, i.e., from
+September to June.
 
 Sometimes, we may want the levels of a factor to comprise a set of
 specific values or to be ordered in a specific way. This could be the
@@ -328,7 +291,7 @@ chronologically ordered. We can do that as follows:
     +                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
     > head(mf)
 
-    [1] Nov Nov Nov Nov Nov Nov
+    [1] May May May May May May
     Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
     > levels(mf)
@@ -351,57 +314,65 @@ factor using the function `table()`.
     > table(mf)
 
     mf
-    Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
-      0   6  31  30  31  30  31  31  30  31  24   0 
+     Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov  Dec 
+    1374 1073  998  700  920  439    0    0  905 1166 1180 1078 
 
-We can see, there is no data in 2020 for the months of January (because
-data was not yet recorded) and December (because it is outside the
-period we have subsetted the data). We can remove levels of a factor for
-which there is no data with the function `droplevels()`.
+We can see, there is no data for the months of July and August. We can
+remove levels of a factor for which there is no data with the function
+`droplevels()`.
 
     > mf <- droplevels(mf)
     > levels(mf)
 
-     [1] "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov"
+     [1] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Sep" "Oct" "Nov" "Dec"
 
     > table(mf)
 
     mf
-    Feb Mar Apr May Jun Jul Aug Sep Oct Nov 
-      6  31  30  31  30  31  31  30  31  24 
+     Jan  Feb  Mar  Apr  May  Jun  Sep  Oct  Nov  Dec 
+    1374 1073  998  700  920  439  905 1166 1180 1078 
 
-Using this factor we can easily visualize the distribution of the column
-`R0_CONFIRMAT_M` ([R0 basic reproduction
-number](https://en.wikipedia.org/wiki/Basic_reproduction_number)) as
-function of the month, calling plot with the formula notation `x ~ y`
-(add this plotting instruction to the `covid19analysis.R` script):
+One of the common uses of a factor is to aggregate numerical values by
+the levels of that factor. For instance, in our previous data, the
+column `positiu` contains the number of positively tested individuals,
+but each value in that column corresponds to the number per week,
+region, sex, age group and socioeconomical index. Let’s say we want to
+aggregate those positively tested individuals per month in the
+`data.frame` object `dat2yr2223`. We can use the function `aggregate()`
+for that purpose, as follows:
 
-    > plot(datg20$R0_CONFIRMAT_M ~ mf)
+    > posbymonth <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
 
-![](R0byMonth-1.png)
+Here the first argument is the vector (column of `dat2yr2223` in this
+case) with numerical values that we want to aggregate, the second
+argument is a `list` object with one element for each factor whose
+levels we want to use to group the values, and the third argument is the
+function we want to use to summarize the data per group. The result is a
+`data.frame` object with one column per factor and a final column called
+`x` with the aggregate values:
 
-where here `datg20` refers to the subset of the original `data.frame`
-object `dat`, excluding data from geriatric residences and including
-only data between January and November 2020, and `mf` refers to the
-factor object with the months from that subset of data. The resulting
-plot contains so-called [box
-plots](https://en.wikipedia.org/wiki/Box_plot) for each month, which
-allow to visualize the location of the data in terms of
-[quartiles](https://en.wikipedia.org/wiki/Quartile).
+    > posbymonth
 
-We can see that February has no data points for the column
-`R0_CONFIRMAT_M` despite there are data rows for that month. To find out
-why we do not see any data on the plot we can inspect the values of
-`R0_CONFIRMAT_M` for the month of February as follows:
+       month    x
+    1    Jan 1398
+    2    Feb 1225
+    3    Mar  959
+    4    Apr  582
+    5    May  777
+    6    Jun  313
+    7    Sep  822
+    8    Oct 1157
+    9    Nov 1295
+    10   Dec 1197
 
-    > mask <- mf == "Feb"
-    > datg20$R0_CONFIRMAT_M[mask]
+We can visualize these data in a [scatter
+plot](https://en.wikipedia.org/wiki/Scatter_plot) by converting the
+factor into an integer, and plotting the month into the x-axis and the
+numerical value into the y-axis:
 
-    [1] NA NA NA NA NA NA
+    > plot(as.integer(posbymonth$month), posbymonth$x, type="b")
 
-The value `NA` in R means *not available* and R treats it in a special
-way depending on the operation that is performing. In the case of plots,
-`NA` values are ignored.
+![](posbymonth-1.png)
 
 **Exercise:** look up in the help page of the `plot()` function, how can
 you change the labels for the `x` and `y` axes to a readable label whose
@@ -409,12 +380,25 @@ meaning stands alone and minimally describes the data visualized in that
 axis. The resulting plot should be identical to the one above, but with
 the axes labels changed.
 
-**Exercise:** produce the same kind of plot, but this time showing in
-the *y*-axis the values of the column `IEPG_CONFIRMAT`, corresponding to
-the [effective potential
-growth](https://doi.org/10.1371/journal.pone.0243701) also known as risk
-of outbreak. Can you identify the month in which this risk has increased
-the most?
+**Exercise:** Repeat the same plot, but instead of aggregating the
+number of positive cases, aggregate the positive rate by first
+calculating it using the columns `total` and `positiu`, and then using
+the `mean()` function to aggregate the values. Can you interpret the
+resulting plot?
 
-    > ## plot risk of outbreak as function of the month
-    > plot(datg20$IEPG_CONFIRMAT ~ mf, xlab="Month", ylab="Risk of outbreak")
+**Exercise:** Aggregate again the positive rate as in the previous
+exercise, but this time by two factors, month and age group (look up in
+the `data.frame` object `dat2yr2223` which column may store the age
+group). Assuming the result of the function `aggregate()` is stored into
+a `data.frame` object called `posrbymonthage`, plot the aggregated
+positive rate as function of the month using the following plotting
+instruction:
+
+    > plot(posrbymonthage$x ~ posrbymontage$month, xlab="Month", ylab="Positive rate")
+
+The resulting plot contains so-called [box
+plots](https://en.wikipedia.org/wiki/Box_plot) for each month, which
+allow one to visualize the location and spread of the data in terms of
+[quartiles](https://en.wikipedia.org/wiki/Quartile). How would you
+interpret the different sizes of the boxes throughout the months of the
+year?
