@@ -72,25 +72,20 @@
 [1] &quot;Date&quot;</code></pre>
 <p>Having dates stored as <em>Date</em>-class objects facilitates operations on dates such as calculating time differences:</p>
 <ol type="1">
-<li>Calculating time differences:</li>
-</ol>
-<!-- -->
+<li><p>Calculating time differences:</p>
 <pre><code>&gt; head(enddate - startdate + 1)
 
 Time differences in days
-[1] 7 7 7 7 7 7</code></pre>
-<p>Caculating earliest and latest time with the <code>min()</code> and <code>max()</code> functions:</p>
+[1] 7 7 7 7 7 7</code></pre></li>
+<li><p>Caculating earliest and latest time with the <code>min()</code> and <code>max()</code> functions:</p>
 <pre><code>&gt; min(startdate)
 
 [1] &quot;2022-05-09&quot;
 
 &gt; max(startdate)
 
-[1] &quot;2023-10-16&quot;</code></pre>
-<ol type="1">
-<li>Subsetting data for a period of time. For instance, let’s subset the data, selecting rows corresponding to the last academic year from September 2022 to June 2023:</li>
-</ol>
-<!-- -->
+[1] &quot;2023-10-16&quot;</code></pre></li>
+<li><p>Subsetting data for a period of time. For instance, let’s subset the data, selecting rows corresponding to the last academic year from September 2022 to June 2023:</p>
 <pre><code>&gt; mask &lt;- startdate &gt;= as.Date(&quot;2022-09-01&quot;) &amp; enddate &lt;= as.Date(&quot;2023-06-30&quot;)
 &gt; sum(mask)
 
@@ -100,7 +95,8 @@ Time differences in days
 &gt; dim(dat2yr2223)
 
 [1] 9833   13</code></pre>
-<p>Note that the number of <code>TRUE</code> values in the logical mask matches the resulting number of rows in the subsetted object <code>dat2yr2223</code>.</p>
+<p>Note that the number of <code>TRUE</code> values in the logical mask matches the resulting number of rows in the subsetted object <code>dat2yr2223</code>.</p></li>
+</ol>
 <p>Date data also allows one to easily extract the month of each date. Let’s extract again the starting date this time for the subsetted data, and see how do we get the months from those dates:</p>
 <pre><code>&gt; startdate &lt;- as.Date(dat2yr2223$data_inici, &quot;%d/%m/%Y&quot;)
 &gt; m &lt;- months(startdate, abbreviate=TRUE)
@@ -189,6 +185,16 @@ mf
 <p><img src="posbymonth-1.png" /></p>
 <p><strong>Exercise:</strong> look up in the help page of the <code>plot()</code> function, how can you change the labels for the <code>x</code> and <code>y</code> axes to a readable label whose meaning stands alone and minimally describes the data visualized in that axis. The resulting plot should be identical to the one above, but with the axes labels changed.</p>
 <p><strong>Exercise:</strong> Repeat the same plot, but instead of aggregating the number of positive cases, aggregate the positive rate by first calculating it using the columns <code>total</code> and <code>positiu</code>, and then using the <code>mean()</code> function to aggregate the values. Can you interpret the resulting plot?</p>
+<!--
+dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
+posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
+plot(as.integer(posRateByMonth$month), posRateByMonth$x, type="b")
+-->
 <p><strong>Exercise:</strong> Aggregate again the positive rate as in the previous exercise, but this time by two factors, month and age group (look up in the <code>data.frame</code> object <code>dat2yr2223</code> which column may store the age group). Assuming the result of the function <code>aggregate()</code> is stored into a <code>data.frame</code> object called <code>posrbymonthage</code>, plot the aggregated positive rate as function of the month using the following plotting instruction:</p>
 <pre><code>&gt; plot(posrbymonthage$x ~ posrbymontage$month, xlab=&quot;Month&quot;, ylab=&quot;Positive rate&quot;)</code></pre>
 <p>The resulting plot contains so-called <a href="https://en.wikipedia.org/wiki/Box_plot">box plots</a> for each month, which allow one to visualize the location and spread of the data in terms of <a href="https://en.wikipedia.org/wiki/Quartile">quartiles</a>. How would you interpret the different sizes of the boxes throughout the months of the year?</p>
+<!--
+dat2yr2223$month <- list(month=mf)
+posrbymonthage <- aggregate(x = dat2yr2223$posRate,by = list(month=mf, edat= dat2yr2223$grup_edat) , mean)
+plot(posrbymonthage$x ~ posrbymonthage$month, xlab="Month", ylab="Positive rate")
+-->

@@ -161,42 +161,38 @@ dates such as calculating time differences:
 
 1.  Calculating time differences:
 
-<!-- -->
+        > head(enddate - startdate + 1)
 
-    > head(enddate - startdate + 1)
+        Time differences in days
+        [1] 7 7 7 7 7 7
 
-    Time differences in days
-    [1] 7 7 7 7 7 7
+2.  Caculating earliest and latest time with the `min()` and `max()`
+    functions:
 
-Caculating earliest and latest time with the `min()` and `max()`
-functions:
+        > min(startdate)
 
-    > min(startdate)
+        [1] "2022-05-09"
 
-    [1] "2022-05-09"
+        > max(startdate)
 
-    > max(startdate)
+        [1] "2023-10-16"
 
-    [1] "2023-10-16"
-
-1.  Subsetting data for a period of time. For instance, let’s subset the
+3.  Subsetting data for a period of time. For instance, let’s subset the
     data, selecting rows corresponding to the last academic year from
     September 2022 to June 2023:
 
-<!-- -->
+        > mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
+        > sum(mask)
 
-    > mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
-    > sum(mask)
+        [1] 9833
 
-    [1] 9833
+        > dat2yr2223 <- dat2[mask, ]
+        > dim(dat2yr2223)
 
-    > dat2yr2223 <- dat2[mask, ]
-    > dim(dat2yr2223)
+        [1] 9833   13
 
-    [1] 9833   13
-
-Note that the number of `TRUE` values in the logical mask matches the
-resulting number of rows in the subsetted object `dat2yr2223`.
+    Note that the number of `TRUE` values in the logical mask matches
+    the resulting number of rows in the subsetted object `dat2yr2223`.
 
 Date data also allows one to easily extract the month of each date.
 Let’s extract again the starting date this time for the subsetted data,
@@ -386,6 +382,12 @@ calculating it using the columns `total` and `positiu`, and then using
 the `mean()` function to aggregate the values. Can you interpret the
 resulting plot?
 
+<!--
+dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
+posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
+plot(as.integer(posRateByMonth$month), posRateByMonth$x, type="b")
+-->
+
 **Exercise:** Aggregate again the positive rate as in the previous
 exercise, but this time by two factors, month and age group (look up in
 the `data.frame` object `dat2yr2223` which column may store the age
@@ -402,3 +404,9 @@ allow one to visualize the location and spread of the data in terms of
 [quartiles](https://en.wikipedia.org/wiki/Quartile). How would you
 interpret the different sizes of the boxes throughout the months of the
 year?
+
+<!--
+dat2yr2223$month <- list(month=mf)
+posrbymonthage <- aggregate(x = dat2yr2223$posRate,by = list(month=mf, edat= dat2yr2223$grup_edat) , mean)
+plot(posrbymonthage$x ~ posrbymonthage$month, xlab="Month", ylab="Positive rate")
+-->

@@ -147,30 +147,27 @@ as calculating time differences:
 
 1. Calculating time differences:
 
-```{r}
-head(enddate - startdate + 1)
-```
+    ```{r}
+    head(enddate - startdate + 1)
+    ```
+2. Caculating earliest and latest time with the `min()` and `max()` functions:
 
-Caculating earliest and latest time with the `min()` and `max()` functions:
-
-```{r}
-min(startdate)
-max(startdate)
-```
-
+    ```{r}
+    min(startdate)
+    max(startdate)
+    ```
 3. Subsetting data for a period of time. For instance, let’s subset the
 data, selecting rows corresponding to the last academic year from September
 2022 to June 2023:
 
-```{r}
-mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
-sum(mask)
-dat2yr2223 <- dat2[mask, ]
-dim(dat2yr2223)
-```
-
-Note that the number of `TRUE` values in the logical mask matches the resulting
-number of rows in the subsetted object `dat2yr2223`.
+    ```{r}
+    mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
+    sum(mask)
+    dat2yr2223 <- dat2[mask, ]
+    dim(dat2yr2223)
+    ```
+    Note that the number of `TRUE` values in the logical mask matches the resulting
+    number of rows in the subsetted object `dat2yr2223`.
 
 Date data also allows one to easily extract the month of each date. Let's extract
 again the starting date this time for the subsetted data, and see how do we get
