@@ -185,16 +185,30 @@ mf
 <p><img src="posbymonth-1.png" /></p>
 <p><strong>Exercise:</strong> look up in the help page of the <code>plot()</code> function, how can you change the labels for the <code>x</code> and <code>y</code> axes to a readable label whose meaning stands alone and minimally describes the data visualized in that axis. The resulting plot should be identical to the one above, but with the axes labels changed.</p>
 <p><strong>Exercise:</strong> Repeat the same plot, but instead of aggregating the number of positive cases, aggregate the positive rate by first calculating it using the columns <code>total</code> and <code>positiu</code>, and then using the <code>mean()</code> function to aggregate the values. Can you interpret the resulting plot?</p>
+<pre><code>&gt; pbym &lt;- aggregate(dat2yr2223$positiu, list(month=mf), sum)
+&gt; tbym &lt;- aggregate(dat2yr2223$total, list(month=mf), sum)
+&gt; pbym$x &lt;- pbym$x / tbym$x
+&gt; pbym$x &lt;- pbym$x * 100
+&gt; dat2yr2223$posRate &lt;- dat2yr2223$positiu / dat2yr2223$total *100
+&gt; posRateByMonth &lt;- aggregate(dat2yr2223$posRate, list(month=mf), mean)</code></pre>
 <!--
 dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
 posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
 plot(as.integer(posRateByMonth$month), posRateByMonth$x, type="b")
+
+or, more numerically stable,
+
+pbym <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
+tbym <- aggregate(dat2yr2223$total, list(month=mf), sum)
+pct <- 100 * pbym$x / tbym$x
+
+use this more numerically stable approach to suggest the plot below
 -->
 <p><strong>Exercise:</strong> Aggregate again the positive rate as in the previous exercise, but this time by two factors, month and age group (look up in the <code>data.frame</code> object <code>dat2yr2223</code> which column may store the age group). Assuming the result of the function <code>aggregate()</code> is stored into a <code>data.frame</code> object called <code>posrbymonthage</code>, plot the aggregated positive rate as function of the month using the following plotting instruction:</p>
 <pre><code>&gt; plot(posrbymonthage$x ~ posrbymontage$month, xlab=&quot;Month&quot;, ylab=&quot;Positive rate&quot;)</code></pre>
 <p>The resulting plot contains so-called <a href="https://en.wikipedia.org/wiki/Box_plot">box plots</a> for each month, which allow one to visualize the location and spread of the data in terms of <a href="https://en.wikipedia.org/wiki/Quartile">quartiles</a>. How would you interpret the different sizes of the boxes throughout the months of the year?</p>
 <!--
-dat2yr2223$month <- list(month=mf)
+dat2yr2223$month <- month=mf
 posrbymonthage <- aggregate(x = dat2yr2223$posRate,by = list(month=mf, edat= dat2yr2223$grup_edat) , mean)
 plot(posrbymonthage$x ~ posrbymonthage$month, xlab="Month", ylab="Positive rate")
 -->

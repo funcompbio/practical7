@@ -318,10 +318,26 @@ of positive cases, aggregate the positive rate by first calculating it
 using the columns `total` and `positiu`, and then using the `mean()`
 function to aggregate the values. Can you interpret the resulting plot?
 
+```{r}
+pbym <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
+tbym <- aggregate(dat2yr2223$total, list(month=mf), sum)
+pbym$x <- pbym$x / tbym$x
+pbym$x <- pbym$x * 100
+dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
+posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
+```
 <!--
 dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
 posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
 plot(as.integer(posRateByMonth$month), posRateByMonth$x, type="b")
+
+or, more numerically stable,
+
+pbym <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
+tbym <- aggregate(dat2yr2223$total, list(month=mf), sum)
+pct <- 100 * pbym$x / tbym$x
+
+use this more numerically stable approach to suggest the plot below
 -->
 
 **Exercise:** Aggregate again the positive rate as in the previous exercise,
@@ -342,7 +358,7 @@ one to visualize the location and spread of the data in terms of
 different sizes of the boxes throughout the months of the year?
 
 <!--
-dat2yr2223$month <- list(month=mf)
+dat2yr2223$month <- month=mf
 posrbymonthage <- aggregate(x = dat2yr2223$posRate,by = list(month=mf, edat= dat2yr2223$grup_edat) , mean)
 plot(posrbymonthage$x ~ posrbymonthage$month, xlab="Month", ylab="Positive rate")
 -->
