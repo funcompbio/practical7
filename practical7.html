@@ -185,12 +185,6 @@ mf
 <p><img src="posbymonth-1.png" /></p>
 <p><strong>Exercise:</strong> look up in the help page of the <code>plot()</code> function, how can you change the labels for the <code>x</code> and <code>y</code> axes to a readable label whose meaning stands alone and minimally describes the data visualized in that axis. The resulting plot should be identical to the one above, but with the axes labels changed.</p>
 <p><strong>Exercise:</strong> Repeat the same plot, but instead of aggregating the number of positive cases, aggregate the positive rate by first calculating it using the columns <code>total</code> and <code>positiu</code>, and then using the <code>mean()</code> function to aggregate the values. Can you interpret the resulting plot?</p>
-<pre><code>&gt; pbym &lt;- aggregate(dat2yr2223$positiu, list(month=mf), sum)
-&gt; tbym &lt;- aggregate(dat2yr2223$total, list(month=mf), sum)
-&gt; pbym$x &lt;- pbym$x / tbym$x
-&gt; pbym$x &lt;- pbym$x * 100
-&gt; dat2yr2223$posRate &lt;- dat2yr2223$positiu / dat2yr2223$total *100
-&gt; posRateByMonth &lt;- aggregate(dat2yr2223$posRate, list(month=mf), mean)</code></pre>
 <!--
 dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
 posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
