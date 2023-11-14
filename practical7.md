@@ -382,13 +382,6 @@ calculating it using the columns `total` and `positiu`, and then using
 the `mean()` function to aggregate the values. Can you interpret the
 resulting plot?
 
-    > pbym <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
-    > tbym <- aggregate(dat2yr2223$total, list(month=mf), sum)
-    > pbym$x <- pbym$x / tbym$x
-    > pbym$x <- pbym$x * 100
-    > dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
-    > posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
-
 <!--
 dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
 posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
