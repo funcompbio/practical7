@@ -115,7 +115,7 @@ dat2 <- dat[mask, ]
 These data have two columns called `data_inici` and `data_final` that
 corresponding to the begining and end of the 7-day period of the data of
 that row, but which are stored as string character vectors (more
-specifically as [factors](https://funcompbio.github.io/lecture6/#25)).
+specifically as [factors](https://funcompbio.github.io/lecture6/#26)).
 However, R provides a way to store dates as such and this has the
 advantage that facilitates manipulating them for analysis purposes.
 

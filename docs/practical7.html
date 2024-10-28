@@ -48,7 +48,7 @@
 &gt; dat2 &lt;- dat[mask, ]</code></pre>
 <p>Once you subset data, it is always convenient to compare the dimensions of the original and resulting object, using the function <code>dim()</code>, and think whether the difference in dimensions makes sense (e.g., subsetting should always lead to a smaller object in some dimension), and whether the number of rows in this case matches the number of <code>TRUE</code> values in the logical mask.</p>
 <h1 id="date-data-management">Date-data management</h1>
-<p>These data have two columns called <code>data_inici</code> and <code>data_final</code> that corresponding to the begining and end of the 7-day period of the data of that row, but which are stored as string character vectors (more specifically as <a href="https://funcompbio.github.io/lecture6/#25">factors</a>). However, R provides a way to store dates as such and this has the advantage that facilitates manipulating them for analysis purposes.</p>
+<p>These data have two columns called <code>data_inici</code> and <code>data_final</code> that corresponding to the begining and end of the 7-day period of the data of that row, but which are stored as string character vectors (more specifically as <a href="https://funcompbio.github.io/lecture6/#26">factors</a>). However, R provides a way to store dates as such and this has the advantage that facilitates manipulating them for analysis purposes.</p>
 <p>For instance, to transform the two columns containing date data we should use the function <code>as.Date()</code> as follows:</p>
 <pre><code>&gt; startdate &lt;- as.Date(dat2$data_inici, &quot;%d/%m/%Y&quot;)
 &gt; enddate &lt;- as.Date(dat2$data_final, &quot;%d/%m/%Y&quot;)</code></pre>
