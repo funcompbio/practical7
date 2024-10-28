@@ -77,26 +77,26 @@ You can examine the first 6 rows of the loaded CSV file with the
     > head(dat)
 
       setmana_epidemiologica  any data_inici data_final codi_regio
-    1                     19 2023 08/05/2023 14/05/2023         67
-    2                     25 2022 20/06/2022 26/06/2022         64
-    3                     19 2023 08/05/2023 14/05/2023         78
-    4                     42 2023 16/10/2023 22/10/2023         78
-    5                     19 2023 08/05/2023 14/05/2023         78
-    6                     20 2023 15/05/2023 21/05/2023         78
-              nom_regio codi_ambit          nom_ambit sexe grup_edat
-    1 CATALUNYA CENTRAL       6700  CATALUNYA CENTRAL Dona   20 a 24
-    2            GIRONA       6400             GIRONA Home     3 i 4
-    3         BARCELONA       7802 METROPOLITANA NORD Dona   20 a 24
-    4         BARCELONA       7802 METROPOLITANA NORD Home   15 a 19
-    5         BARCELONA       7802 METROPOLITANA NORD Dona   40 a 44
-    6         BARCELONA       7801  METROPOLITANA SUD Dona   65 a 69
-      index_socioeconomic total positiu
-    1                   3     1       0
-    2                   3     1       1
-    3                   4     1       1
-    4                   4     2       1
-    5                   3     3       2
-    6                   2     1       1
+    1                     12 2023 20/03/2023 26/03/2023         62
+    2                     44 2023 30/10/2023 05/11/2023         62
+    3                     32 2022 08/08/2022 14/08/2022         75
+    4                     27 2023 03/07/2023 09/07/2023         70
+    5                     42 2022 17/10/2022 23/10/2022         64
+    6                     11 2023 13/03/2023 19/03/2023         70
+                        nom_regio codi_ambit                   nom_ambit sexe
+    1           Camp de Tarragona         62           Camp de Tarragona Dona
+    2           Camp de Tarragona         62           Camp de Tarragona Home
+    3 Barcelona Metropolitana Sud         75 Barcelona Metropolitana Sud Home
+    4                     Penedès         70                     Penedès Home
+    5                      Girona         64                      Girona Dona
+    6                     Penedès         70                     Penedès Home
+      grup_edat index_socioeconomic total positiu
+    1   30 a 34                   2     1       1
+    2   30 a 34                   3     1       0
+    3   35 a 39                   2     1       1
+    4   60 a 64                   4     1       0
+    5   70 a 74                   3     1       1
+    6   70 a 74                   4     1       1
 
 **Exercise**: tabulate the values of the column `sexe` with the function
 `table()`. Add to the script `sivicanalysis.R` the following two lines
@@ -140,8 +140,8 @@ objects, the class *Date*.
 
     > head(startdate)
 
-    [1] "2023-05-08" "2022-06-20" "2023-05-08" "2023-10-16" "2023-05-08"
-    [6] "2023-05-15"
+    [1] "2023-03-20" "2023-10-30" "2022-08-08" "2023-07-03" "2022-10-17"
+    [6] "2023-03-13"
 
     > class(startdate)
 
@@ -149,8 +149,8 @@ objects, the class *Date*.
 
     > head(enddate)
 
-    [1] "2023-05-14" "2022-06-26" "2023-05-14" "2023-10-22" "2023-05-14"
-    [6] "2023-05-21"
+    [1] "2023-03-26" "2023-11-05" "2022-08-14" "2023-07-09" "2022-10-23"
+    [6] "2023-03-19"
 
     > class(enddate)
 
@@ -175,34 +175,34 @@ dates such as calculating time differences:
 
         > max(startdate)
 
-        [1] "2023-10-16"
+        [1] "2024-10-14"
 
 3.  Subsetting data for a period of time. For instance, let’s subset the
     data, selecting rows corresponding to the last academic year from
-    September 2022 to June 2023:
+    September 2023 to June 2024:
 
-        > mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
+        > mask <- startdate >= as.Date("2023-09-01") & enddate <= as.Date("2024-06-30")
         > sum(mask)
 
-        [1] 9833
+        [1] 8116
 
-        > dat2yr2223 <- dat2[mask, ]
-        > dim(dat2yr2223)
+        > dat2yr2324 <- dat2[mask, ]
+        > dim(dat2yr2324)
 
-        [1] 9833   13
+        [1] 8116   13
 
     Note that the number of `TRUE` values in the logical mask matches
-    the resulting number of rows in the subsetted object `dat2yr2223`.
+    the resulting number of rows in the subsetted object `dat2yr2324`.
 
 Date data also allows one to easily extract the month of each date.
 Let’s extract again the starting date this time for the subsetted data,
 and see how do we get the months from those dates:
 
-    > startdate <- as.Date(dat2yr2223$data_inici, "%d/%m/%Y")
+    > startdate <- as.Date(dat2yr2324$data_inici, "%d/%m/%Y")
     > m <- months(startdate, abbreviate=TRUE)
     > head(m)
 
-    [1] "May" "May" "May" "May" "May" "May"
+    [1] "Oct" "Sep" "Nov" "May" "Oct" "Sep"
 
     > class(m)
 
@@ -256,7 +256,7 @@ vector `m` of character strings to a factor.
     > mf <- factor(m)
     > head(mf)
 
-    [1] May May May May May May
+    [1] Oct Sep Nov May Oct Sep
     Levels: Apr Dec Feb Jan Jun Mar May Nov Oct Sep
 
 We can see that R displays factors differently to character strings, by
@@ -287,7 +287,7 @@ chronologically ordered. We can do that as follows:
     +                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
     > head(mf)
 
-    [1] May May May May May May
+    [1] Oct Sep Nov May Oct Sep
     Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
     > levels(mf)
@@ -311,7 +311,7 @@ factor using the function `table()`.
 
     mf
      Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov  Dec 
-    1374 1073  998  700  920  439    0    0  905 1166 1180 1078 
+    1013  861  888  914  743  676    0    0  650  975  815  581 
 
 We can see, there is no data for the months of July and August. We can
 remove levels of a factor for which there is no data with the function
@@ -326,7 +326,7 @@ remove levels of a factor for which there is no data with the function
 
     mf
      Jan  Feb  Mar  Apr  May  Jun  Sep  Oct  Nov  Dec 
-    1374 1073  998  700  920  439  905 1166 1180 1078 
+    1013  861  888  914  743  676  650  975  815  581 
 
 One of the common uses of a factor is to aggregate numerical values by
 the levels of that factor. For instance, in our previous data, the
@@ -334,12 +334,12 @@ column `positiu` contains the number of positively tested individuals,
 but each value in that column corresponds to the number per week,
 region, sex, age group and socioeconomical index. Let’s say we want to
 aggregate those positively tested individuals per month in the
-`data.frame` object `dat2yr2223`. We can use the function `aggregate()`
+`data.frame` object `dat2yr2324`. We can use the function `aggregate()`
 for that purpose, as follows:
 
-    > posbymonth <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
+    > posbymonth <- aggregate(dat2yr2324$positiu, list(month=mf), sum)
 
-Here the first argument is the vector (column of `dat2yr2223` in this
+Here the first argument is the vector (column of `dat2yr2324` in this
 case) with numerical values that we want to aggregate, the second
 argument is a `list` object with one element for each factor whose
 levels we want to use to group the values, and the third argument is the
@@ -350,16 +350,16 @@ function we want to use to summarize the data per group. The result is a
     > posbymonth
 
        month    x
-    1    Jan 1398
-    2    Feb 1225
-    3    Mar  959
-    4    Apr  582
-    5    May  777
-    6    Jun  313
-    7    Sep  822
-    8    Oct 1157
-    9    Nov 1295
-    10   Dec 1197
+    1    Jan 1006
+    2    Feb  725
+    3    Mar  764
+    4    Apr  701
+    5    May  571
+    6    Jun  559
+    7    Sep  501
+    8    Oct  789
+    9    Nov  784
+    10   Dec  550
 
 We can visualize these data in a [scatter
 plot](https://en.wikipedia.org/wiki/Scatter_plot) by converting the
@@ -383,14 +383,14 @@ the `mean()` function to aggregate the values. Can you interpret the
 resulting plot?
 
 <!--
-dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
-posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
+dat2yr2324$posRate <- dat2yr2324$positiu / dat2yr2324$total *100
+posRateByMonth <- aggregate(dat2yr2324$posRate, list(month=mf), mean)
 plot(as.integer(posRateByMonth$month), posRateByMonth$x, type="b")
 
 or, more numerically stable,
 
-pbym <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
-tbym <- aggregate(dat2yr2223$total, list(month=mf), sum)
+pbym <- aggregate(dat2yr2324$positiu, list(month=mf), sum)
+tbym <- aggregate(dat2yr2324$total, list(month=mf), sum)
 pct <- 100 * pbym$x / tbym$x
 
 use this more numerically stable approach to suggest the plot below
@@ -398,7 +398,7 @@ use this more numerically stable approach to suggest the plot below
 
 **Exercise:** Aggregate again the positive rate as in the previous
 exercise, but this time by two factors, month and age group (look up in
-the `data.frame` object `dat2yr2223` which column may store the age
+the `data.frame` object `dat2yr2324` which column may store the age
 group). Assuming the result of the function `aggregate()` is stored into
 a `data.frame` object called `posrbymonthage`, plot the aggregated
 positive rate as function of the month using the following plotting
@@ -414,7 +414,7 @@ interpret the different sizes of the boxes throughout the months of the
 year?
 
 <!--
-dat2yr2223$month <- month=mf
-posrbymonthage <- aggregate(x = dat2yr2223$posRate,by = list(month=mf, edat= dat2yr2223$grup_edat) , mean)
+dat2yr2324$month <- month=mf
+posrbymonthage <- aggregate(x = dat2yr2324$posRate,by = list(month=mf, edat= dat2yr2324$grup_edat) , mean)
 plot(posrbymonthage$x ~ posrbymonthage$month, xlab="Month", ylab="Positive rate")
 -->

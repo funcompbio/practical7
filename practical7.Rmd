@@ -158,28 +158,27 @@ as calculating time differences:
     ```
 3. Subsetting data for a period of time. For instance, let’s subset the
 data, selecting rows corresponding to the last academic year from September
-2022 to June 2023:
+2023 to June 2024:
 
     ```{r}
-    mask <- startdate >= as.Date("2022-09-01") & enddate <= as.Date("2023-06-30")
+    mask <- startdate >= as.Date("2023-09-01") & enddate <= as.Date("2024-06-30")
     sum(mask)
-    dat2yr2223 <- dat2[mask, ]
-    dim(dat2yr2223)
+    dat2yr2324 <- dat2[mask, ]
+    dim(dat2yr2324)
     ```
     Note that the number of `TRUE` values in the logical mask matches the resulting
-    number of rows in the subsetted object `dat2yr2223`.
+    number of rows in the subsetted object `dat2yr2324`.
 
 Date data also allows one to easily extract the month of each date. Let's extract
 again the starting date this time for the subsetted data, and see how do we get
 the months from those dates:
 
 ```{r}
-startdate <- as.Date(dat2yr2223$data_inici, "%d/%m/%Y")
+startdate <- as.Date(dat2yr2324$data_inici, "%d/%m/%Y")
 m <- months(startdate, abbreviate=TRUE)
 head(m)
 class(m)
 ```
-
 where we have to use the argument `abbreviate=TRUE` in the `months()` function
 to obtain a vector of equally sized character strings, which may be useful
 for visualization purposes.
@@ -196,8 +195,8 @@ the R shell:
 ```{r, eval=FALSE}
 Sys.setlocale("LC_TIME", "C")
 ```
-
 and then type again:
+
 ```{r}
 m <- months(startdate, abbreviate=TRUE)
 ```
@@ -280,14 +279,14 @@ levels of that factor. For instance, in our previous data, the column
 `positiu` contains the number of positively tested individuals, but each value
 in that column corresponds to the number per week, region, sex, age group and
 socioeconomical index. Let's say we want to aggregate those positively tested
-individuals per month in the `data.frame` object `dat2yr2223`. We can use the
+individuals per month in the `data.frame` object `dat2yr2324`. We can use the
 function `aggregate()` for that purpose, as follows:
 
 ```{r}
-posbymonth <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
+posbymonth <- aggregate(dat2yr2324$positiu, list(month=mf), sum)
 ```
 
-Here the first argument is the vector (column of `dat2yr2223` in this case)
+Here the first argument is the vector (column of `dat2yr2324` in this case)
 with numerical values that we want to aggregate, the second argument is a
 `list` object with one element for each factor whose levels we want to use
 to group the values, and the third argument is the function we want to use
@@ -319,14 +318,14 @@ using the columns `total` and `positiu`, and then using the `mean()`
 function to aggregate the values. Can you interpret the resulting plot?
 
 <!--
-dat2yr2223$posRate <- dat2yr2223$positiu / dat2yr2223$total *100
-posRateByMonth <- aggregate(dat2yr2223$posRate, list(month=mf), mean)
+dat2yr2324$posRate <- dat2yr2324$positiu / dat2yr2324$total *100
+posRateByMonth <- aggregate(dat2yr2324$posRate, list(month=mf), mean)
 plot(as.integer(posRateByMonth$month), posRateByMonth$x, type="b")
 
 or, more numerically stable,
 
-pbym <- aggregate(dat2yr2223$positiu, list(month=mf), sum)
-tbym <- aggregate(dat2yr2223$total, list(month=mf), sum)
+pbym <- aggregate(dat2yr2324$positiu, list(month=mf), sum)
+tbym <- aggregate(dat2yr2324$total, list(month=mf), sum)
 pct <- 100 * pbym$x / tbym$x
 
 use this more numerically stable approach to suggest the plot below
@@ -334,7 +333,7 @@ use this more numerically stable approach to suggest the plot below
 
 **Exercise:** Aggregate again the positive rate as in the previous exercise,
 but this time by two factors, month and age group (look up in the
-`data.frame` object `dat2yr2223` which column may store the age group). Assuming
+`data.frame` object `dat2yr2324` which column may store the age group). Assuming
 the result of the function `aggregate()` is stored into a `data.frame` object
 called `posrbymonthage`, plot the aggregated positive rate as function of the
 month using the following plotting instruction:
@@ -350,7 +349,7 @@ one to visualize the location and spread of the data in terms of
 different sizes of the boxes throughout the months of the year?
 
 <!--
-dat2yr2223$month <- month=mf
-posrbymonthage <- aggregate(x = dat2yr2223$posRate,by = list(month=mf, edat= dat2yr2223$grup_edat) , mean)
+dat2yr2324$month <- month=mf
+posrbymonthage <- aggregate(x = dat2yr2324$posRate,by = list(month=mf, edat= dat2yr2324$grup_edat) , mean)
 plot(posrbymonthage$x ~ posrbymonthage$month, xlab="Month", ylab="Positive rate")
 -->
