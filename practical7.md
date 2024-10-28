@@ -232,7 +232,7 @@ Verify that now the vector `m` has the month names in English.
 Factors
 =======
 
-[Factors](https://funcompbio.github.io/lecture6/#25) in R are a class of
+[Factors](https://funcompbio.github.io/lecture6/#26) in R are a class of
 objects that serve the purpose of storing what is known in statistics as
 a [categorical
 variable](https://en.wikipedia.org/wiki/Categorical_variable), which is
