@@ -94,7 +94,7 @@ to obtain a new `data.frame` object called `dat2` that excludes rows where
 the value in the column `sexe` is `No disponible`. You have to figure out the
 code that replaces de questions marks `??????`.
 
-```{r eval=FALSE}
+```{r, eval=FALSE}
 mask <- ??????
 dat2 <- dat[mask, ]
 ```

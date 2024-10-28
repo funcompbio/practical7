@@ -105,7 +105,7 @@ where the value in the column `sexe` is `No disponible`. You have to
 figure out the code that replaces de questions marks `??????`.
 
     > mask <- ??????
-    + dat2 <- dat[mask, ]
+    > dat2 <- dat[mask, ]
 
 Once you subset data, it is always convenient to compare the dimensions
 of the original and resulting object, using the function `dim()`, and
