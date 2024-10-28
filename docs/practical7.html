@@ -43,7 +43,7 @@
 4                   4     2       1
 5                   3     3       2
 6                   2     1       1</code></pre>
-<p><strong>Exercise</strong>: tabulate the values of the column <code>sexe</code> with the function <code>table()</code>. Add to the script <code>sivicanalysis.R</code> the following two lines to obtain a new <code>data.frame</code> object called <code>dat2</code> that excludes rows where the value in the column <code>sexe</code> is <code>No disponible</code>. You have to figure out the code that replaces de questions marks <code>??????</code>.</p>
+<p><strong>Exercise</strong>: tabulate the values of the column <code>sexe</code> with the function <code>table()</code>. Add to the script <code>sivicanalysis.R</code> the following two lines to obtain a new <code>data.frame</code> object called <code>dat2</code> that excludes rows where the value in the column <code>sexe</code> is <code>No disponible</code>. You have to figure out the code that replaces the questions marks <code>??????</code> below.</p>
 <pre><code>&gt; mask &lt;- ??????
 &gt; dat2 &lt;- dat[mask, ]</code></pre>
 <p>Once you subset data, it is always convenient to compare the dimensions of the original and resulting object, using the function <code>dim()</code>, and think whether the difference in dimensions makes sense (e.g., subsetting should always lead to a smaller object in some dimension), and whether the number of rows in this case matches the number of <code>TRUE</code> values in the logical mask.</p>

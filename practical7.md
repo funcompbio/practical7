@@ -102,7 +102,7 @@ You can examine the first 6 rows of the loaded CSV file with the
 `table()`. Add to the script `sivicanalysis.R` the following two lines
 to obtain a new `data.frame` object called `dat2` that excludes rows
 where the value in the column `sexe` is `No disponible`. You have to
-figure out the code that replaces de questions marks `??????`.
+figure out the code that replaces the questions marks `??????` below.
 
     > mask <- ??????
     > dat2 <- dat[mask, ]
