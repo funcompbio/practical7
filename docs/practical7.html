@@ -6,20 +6,68 @@
 <li>How to create and use factor objects.</li>
 </ul>
 <h1 id="setup-and-background">Setup and background</h1>
-<p>To do this practical you need an installation of R and RStudio. You can find the instructions in the <a href="/setup#r-and-rstudio">setup</a> link on how to install R and RStudio in your system. For a smooth development of this practical, it is strongly recommended that you follow and finish the previous <a href="/seminar4/">seminar 4</a> on how to get started with R and RStudio.</p>
-<p>We will use the data files called <code>mostres_analitzades.csv</code> and <code>virus_detectats.csv</code> that were generated in the <a href="/practical1/">first practical</a>. If you don’t have these files, please review that practical and generate them again. Once you have obtained those two files, copy them into a fresh new directory called <code>practical7</code>.</p>
+<p>To do this practical you need an installation of R and RStudio. You
+can find the instructions in the <a
+href="/setup#r-and-rstudio">setup</a> link on how to install R and
+RStudio in your system. For a smooth development of this practical, it
+is strongly recommended that you follow and finish the previous <a
+href="/seminar4/">seminar 4</a> on how to get started with R and
+RStudio.</p>
+<p>We will use the data files called
+<code>mostres_analitzades.csv</code> and
+<code>virus_detectats.csv</code> that were generated in the <a
+href="/practical1/">first practical</a>. If you don’t have these files,
+please review that practical and generate them again. Once you have
+obtained those two files, copy them into a fresh new directory called
+<code>practical7</code>. The values obtained below have been obtained
+with the following specific versions (Feb 9, 2026) of these files:</p>
+<ul>
+<li><a href="mostres_analitzades.csv">mostres_analitzades.csv</a>.</li>
+<li><a href="virus_detectats.csv">virus_detectats.csv</a>.</li>
+</ul>
 <h1 id="writing-r-scripts">Writing R scripts</h1>
-<p>We may often use an interactive R session to quickly examine data or make some straightforward calculations. In such an interactive session, we can also recover previous instructions in the R shell by pressing the <code>upwards arrow</code> key. However, if we really want to keep track of the R commands we are using, we should write them in a text file with filename extension <code>.R</code>, which we shall refer hereafter as an <em>R script</em>.</p>
-<p>There are two main ways to create an R script: (1) opening a new file with a text editor and saving it with filename that includes the <code>.R</code> extension, or (2) if we are working with RStudio, then we click on the <code>File</code> menu and select the options <code>New File</code> -&gt; <code>R Script</code>. When we do that we should be getting the RStudio window splitted in four panes, the default three ones and one additional one for the newly created R script, as shown in the captured window below.</p>
+<p>We may often use an interactive R session to quickly examine data or
+make some straightforward calculations. In such an interactive session,
+we can also recover previous instructions in the R shell by pressing the
+<code>upwards arrow</code> key. However, if we really want to keep track
+of the R commands we are using, we should write them in a text file with
+filename extension <code>.R</code>, which we shall refer hereafter as an
+<em>R script</em>.</p>
+<p>There are two main ways to create an R script: (1) opening a new file
+with a text editor and saving it with filename that includes the
+<code>.R</code> extension, or (2) if we are working with RStudio, then
+we click on the <code>File</code> menu and select the options
+<code>New File</code> -&gt; <code>R Script</code>. When we do that we
+should be getting the RStudio window splitted in four panes, the default
+three ones and one additional one for the newly created R script, as
+shown in the captured window below.</p>
 <p><img src="RStudioNewScript.png" /></p>
-<p>Type in the newly created R script (either with a text editor or with RStudio) the following two lines to read the CSV file downloaded in the previous section. The first line is a comment. Lines starting with the <code>#</code> symbol are comments in R.</p>
+<p>Type in the newly created R script (either with a text editor or with
+RStudio) the following two lines to read the CSV file downloaded in the
+previous section. The first line is a comment. Lines starting with the
+<code>#</code> symbol are comments in R.</p>
 <pre><code>&gt; ## read SIVIC data
 &gt; dat &lt;- read.csv(&quot;mostres_analitzades.csv&quot;, stringsAsFactors=TRUE)</code></pre>
-<p>Now save the R script in the directory <code>practical7</code> under the filename <code>sivicanalysis.R</code>.</p>
-<p>To execute a specific line of an R script in RStudio you should move the cursor to that line in the pane with the script file and press the key combination <code>Ctrl+Enter</code> (<code>Cmd+Enter</code> in Apple computers). Alternatively, you can also copy and paste the line from the script to the R shell, specially if you are not working with RStudio.</p>
-<p>The previous line may produce an error if the current working directory of R is not pointing to the directory where the file <code>.csv</code> is; see previous <a href="/seminar4/">seminar 4</a> if you need to find out how to change the working directory in R and RStudio.</p>
-<p>In general, changing the working directory should be always performed in the R shell and <strong>NEVER</strong> include the instruction that changes the working directory in an R script. The reason is because you or somebody else may want to run that script in a different computer where the directory with the data may be called differently.</p>
-<p>You can examine the first 6 rows of the loaded CSV file with the <code>head()</code> function as follows:</p>
+<p>Now save the R script in the directory <code>practical7</code> under
+the filename <code>sivicanalysis.R</code>.</p>
+<p>To execute a specific line of an R script in RStudio you should move
+the cursor to that line in the pane with the script file and press the
+key combination <code>Ctrl+Enter</code> (<code>Cmd+Enter</code> in Apple
+computers). Alternatively, you can also copy and paste the line from the
+script to the R shell, specially if you are not working with
+RStudio.</p>
+<p>The previous line may produce an error if the current working
+directory of R is not pointing to the directory where the file
+<code>.csv</code> is; see previous <a href="/seminar4/">seminar 4</a> if
+you need to find out how to change the working directory in R and
+RStudio.</p>
+<p>In general, changing the working directory should be always performed
+in the R shell and <strong>NEVER</strong> include the instruction that
+changes the working directory in an R script. The reason is because you
+or somebody else may want to run that script in a different computer
+where the directory with the data may be called differently.</p>
+<p>You can examine the first 6 rows of the loaded CSV file with the
+<code>head()</code> function as follows:</p>
 <pre><code>&gt; head(dat)
 
   setmana_epidemiologica  any data_inici data_final codi_regio
@@ -43,16 +91,40 @@
 4   60 a 64                   4     1       0
 5   70 a 74                   3     1       1
 6   70 a 74                   4     1       1</code></pre>
-<p><strong>Exercise</strong>: tabulate the values of the column <code>sexe</code> with the function <code>table()</code>. Add to the script <code>sivicanalysis.R</code> the following two lines to obtain a new <code>data.frame</code> object called <code>dat2</code> that excludes rows where the value in the column <code>sexe</code> is <code>No disponible</code>. You have to figure out the code that replaces the questions marks <code>??????</code> below.</p>
+<p><strong>Exercise</strong>: tabulate the values of the column
+<code>sexe</code> with the function <code>table()</code>. Add to the
+script <code>sivicanalysis.R</code> the following two lines to obtain a
+new <code>data.frame</code> object called <code>dat2</code> that
+excludes rows where the value in the column <code>sexe</code> is
+<code>No disponible</code>. You have to figure out the code that
+replaces the questions marks <code>??????</code> below.</p>
 <pre><code>&gt; mask &lt;- ??????
-&gt; dat2 &lt;- dat[mask, ]</code></pre>
-<p>Once you subset data, it is always convenient to compare the dimensions of the original and resulting object, using the function <code>dim()</code>, and think whether the difference in dimensions makes sense (e.g., subsetting should always lead to a smaller object in some dimension), and whether the number of rows in this case matches the number of <code>TRUE</code> values in the logical mask.</p>
++ dat2 &lt;- dat[mask, ]</code></pre>
+<p>Once you subset data, it is always convenient to compare the
+dimensions of the original and resulting object, using the function
+<code>dim()</code>, and think whether the difference in dimensions makes
+sense (e.g., subsetting should always lead to a smaller object in some
+dimension), and whether the number of rows in this case matches the
+number of <code>TRUE</code> values in the logical mask.</p>
 <h1 id="date-data-management">Date-data management</h1>
-<p>These data have two columns called <code>data_inici</code> and <code>data_final</code> that corresponding to the begining and end of the 7-day period of the data of that row, but which are stored as string character vectors (more specifically as <a href="https://funcompbio.github.io/lecture6/#26">factors</a>). However, R provides a way to store dates as such and this has the advantage that facilitates manipulating them for analysis purposes.</p>
-<p>For instance, to transform the two columns containing date data we should use the function <code>as.Date()</code> as follows:</p>
+<p>These data have two columns called <code>data_inici</code> and
+<code>data_final</code> that corresponding to the begining and end of
+the 7-day period of the data of that row, but which are stored as string
+character vectors (more specifically as <a
+href="https://funcompbio.github.io/lecture6/#26">factors</a>). However,
+R provides a way to store dates as such and this has the advantage that
+facilitates manipulating them for analysis purposes.</p>
+<p>For instance, to transform the two columns containing date data we
+should use the function <code>as.Date()</code> as follows:</p>
 <pre><code>&gt; startdate &lt;- as.Date(dat2$data_inici, &quot;%d/%m/%Y&quot;)
 &gt; enddate &lt;- as.Date(dat2$data_final, &quot;%d/%m/%Y&quot;)</code></pre>
-<p>Here the second argument informs the function <code>as.Date()</code> about the format of the input dates, in this case, <em>day/month/4-digit-year</em> corresponding to the format string <code>"%d/%m/%Y</code>. The help page of <code>as.Date()</code> contains full details about this. While R displays these objects as vectors of character strings in the format <em>4-digit-year-month-day</em>, they do belong to a different class of objects, the class <em>Date</em>.</p>
+<p>Here the second argument informs the function <code>as.Date()</code>
+about the format of the input dates, in this case,
+<em>day/month/4-digit-year</em> corresponding to the format string
+<code>"%d/%m/%Y</code>. The help page of <code>as.Date()</code> contains
+full details about this. While R displays these objects as vectors of
+character strings in the format <em>4-digit-year-month-day</em>, they do
+belong to a different class of objects, the class <em>Date</em>.</p>
 <pre><code>&gt; head(startdate)
 
 [1] &quot;2023-03-20&quot; &quot;2023-10-30&quot; &quot;2022-08-08&quot; &quot;2023-07-03&quot; &quot;2022-10-17&quot;
@@ -70,59 +142,97 @@
 &gt; class(enddate)
 
 [1] &quot;Date&quot;</code></pre>
-<p>Having dates stored as <em>Date</em>-class objects facilitates operations on dates such as calculating time differences:</p>
+<p>Having dates stored as <em>Date</em>-class objects facilitates
+operations on dates such as calculating time differences:</p>
 <ol type="1">
 <li><p>Calculating time differences:</p>
 <pre><code>&gt; head(enddate - startdate + 1)
 
 Time differences in days
 [1] 7 7 7 7 7 7</code></pre></li>
-<li><p>Caculating earliest and latest time with the <code>min()</code> and <code>max()</code> functions:</p>
+<li><p>Caculating earliest and latest time with the <code>min()</code>
+and <code>max()</code> functions:</p>
 <pre><code>&gt; min(startdate)
 
 [1] &quot;2022-05-09&quot;
 
 &gt; max(startdate)
 
-[1] &quot;2024-10-14&quot;</code></pre></li>
-<li><p>Subsetting data for a period of time. For instance, let’s subset the data, selecting rows corresponding to the last academic year from September 2023 to June 2024:</p>
+[1] &quot;2026-01-26&quot;</code></pre></li>
+<li><p>Subsetting data for a period of time. For instance, let’s subset
+the data, selecting rows corresponding to the last academic year from
+September 2023 to June 2024:</p>
 <pre><code>&gt; mask &lt;- startdate &gt;= as.Date(&quot;2023-09-01&quot;) &amp; enddate &lt;= as.Date(&quot;2024-06-30&quot;)
 &gt; sum(mask)
 
-[1] 8116
+[1] 8079
 
 &gt; dat2yr2324 &lt;- dat2[mask, ]
 &gt; dim(dat2yr2324)
 
-[1] 8116   13</code></pre>
-<p>Note that the number of <code>TRUE</code> values in the logical mask matches the resulting number of rows in the subsetted object <code>dat2yr2324</code>.</p></li>
+[1] 8079   13</code></pre>
+<p>Note that the number of <code>TRUE</code> values in the logical mask
+matches the resulting number of rows in the subsetted object
+<code>dat2yr2324</code>.</p></li>
 </ol>
-<p>Date data also allows one to easily extract the month of each date. Let’s extract again the starting date this time for the subsetted data, and see how do we get the months from those dates:</p>
+<p>Date data also allows one to easily extract the month of each date.
+Let’s extract again the starting date this time for the subsetted data,
+and see how do we get the months from those dates:</p>
 <pre><code>&gt; startdate &lt;- as.Date(dat2yr2324$data_inici, &quot;%d/%m/%Y&quot;)
 &gt; m &lt;- months(startdate, abbreviate=TRUE)
 &gt; head(m)
 
-[1] &quot;Oct&quot; &quot;Sep&quot; &quot;Nov&quot; &quot;May&quot; &quot;Oct&quot; &quot;Sep&quot;
+[1] &quot;Oct&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Oct&quot;
 
 &gt; class(m)
 
 [1] &quot;character&quot;</code></pre>
-<p>where we have to use the argument <code>abbreviate=TRUE</code> in the <code>months()</code> function to obtain a vector of equally sized character strings, which may be useful for visualization purposes.</p>
-<p><strong>Important:</strong> The previous vector <code>m</code> may contain the names of the months in a different language than English when the regional configuration of your operating system, known as <a href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale configuration</a>, is also different to English. In such a case, it may be handy to switch at least the regional time configuration to English, to facilitate following the rest of this practical. To do that, type the following instruction on the R shell:</p>
+<p>where we have to use the argument <code>abbreviate=TRUE</code> in the
+<code>months()</code> function to obtain a vector of equally sized
+character strings, which may be useful for visualization purposes.</p>
+<p><strong>Important:</strong> The previous vector <code>m</code> may
+contain the names of the months in a different language than English
+when the regional configuration of your operating system, known as <a
+href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale
+configuration</a>, is also different to English. In such a case, it may
+be handy to switch at least the regional time configuration to English,
+to facilitate following the rest of this practical. To do that, type the
+following instruction on the R shell:</p>
 <pre><code>&gt; Sys.setlocale(&quot;LC_TIME&quot;, &quot;C&quot;)</code></pre>
 <p>and then type again:</p>
 <pre><code>&gt; m &lt;- months(startdate, abbreviate=TRUE)</code></pre>
-<p>Verify that now the vector <code>m</code> has the month names in English.</p>
+<p>Verify that now the vector <code>m</code> has the month names in
+English.</p>
 <h1 id="factors">Factors</h1>
-<p><a href="https://funcompbio.github.io/lecture6/#26">Factors</a> in R are a class of objects that serve the purpose of storing what is known in statistics as a <a href="https://en.wikipedia.org/wiki/Categorical_variable">categorical variable</a>, which is a variable that takes values from a limited number of <em>categories</em>, also known as <em>levels</em>. So factors are pretty much like vectors of character strings, but with additional information about what are the different values that may occur on those vectors.</p>
-<p>Not all vectors of character strings are suitable to become factors. For instance, a vector of character strings corresponding to gene identifiers tipically should not become a factor in R, because those identifiers do not represent any kind of <em>category</em> grouping observations.</p>
-<p>Factors are useful, however, in the context of a statistical analysis and data visualization, involving categorical variables. To create a factor object we should call the function <code>factor()</code> giving a vector of character strings as argument. Let’s consider converting the previous vector <code>m</code> of character strings to a factor.</p>
+<p><a href="https://funcompbio.github.io/lecture6/#26">Factors</a> in R
+are a class of objects that serve the purpose of storing what is known
+in statistics as a <a
+href="https://en.wikipedia.org/wiki/Categorical_variable">categorical
+variable</a>, which is a variable that takes values from a limited
+number of <em>categories</em>, also known as <em>levels</em>. So factors
+are pretty much like vectors of character strings, but with additional
+information about what are the different values that may occur on those
+vectors.</p>
+<p>Not all vectors of character strings are suitable to become factors.
+For instance, a vector of character strings corresponding to gene
+identifiers tipically should not become a factor in R, because those
+identifiers do not represent any kind of <em>category</em> grouping
+observations.</p>
+<p>Factors are useful, however, in the context of a statistical analysis
+and data visualization, involving categorical variables. To create a
+factor object we should call the function <code>factor()</code> giving a
+vector of character strings as argument. Let’s consider converting the
+previous vector <code>m</code> of character strings to a factor.</p>
 <pre><code>&gt; mf &lt;- factor(m)
 &gt; head(mf)
 
-[1] Oct Sep Nov May Oct Sep
+[1] Oct Sep Oct Sep Oct Oct
 Levels: Apr Dec Feb Jan Jun Mar May Nov Oct Sep</code></pre>
-<p>We can see that R displays factors differently to character strings, by showing the values without double quotes (<code>"</code>) and providing additional information about the possible <em>levels</em> of that factor. We can access the level information from a factor object with the functions <code>levels()</code> and <code>nlevels()</code>.</p>
+<p>We can see that R displays factors differently to character strings,
+by showing the values without double quotes (<code>"</code>) and
+providing additional information about the possible <em>levels</em> of
+that factor. We can access the level information from a factor object
+with the functions <code>levels()</code> and <code>nlevels()</code>.</p>
 <pre><code>&gt; levels(mf)
 
  [1] &quot;Apr&quot; &quot;Dec&quot; &quot;Feb&quot; &quot;Jan&quot; &quot;Jun&quot; &quot;Mar&quot; &quot;May&quot; &quot;Nov&quot; &quot;Oct&quot; &quot;Sep&quot;
@@ -130,13 +240,19 @@ Levels: Apr Dec Feb Jan Jun Mar May Nov Oct Sep</code></pre>
 &gt; nlevels(mf)
 
 [1] 10</code></pre>
-<p>Note that we have 10 levels instead of 12, because the subsetted data includes only the months corresponding to the academic year, i.e., from September to June.</p>
-<p>Sometimes, we may want the levels of a factor to comprise a set of specific values or to be ordered in a specific way. This could be the case of the previous factor <code>mf</code>, where we would like for instance to have the levels corresponding to the months of the year and chronologically ordered. We can do that as follows:</p>
+<p>Note that we have 10 levels instead of 12, because the subsetted data
+includes only the months corresponding to the academic year, i.e., from
+September to June.</p>
+<p>Sometimes, we may want the levels of a factor to comprise a set of
+specific values or to be ordered in a specific way. This could be the
+case of the previous factor <code>mf</code>, where we would like for
+instance to have the levels corresponding to the months of the year and
+chronologically ordered. We can do that as follows:</p>
 <pre><code>&gt; mf &lt;- factor(m, levels=c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;,
 +                          &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;))
 &gt; head(mf)
 
-[1] Oct Sep Nov May Oct Sep
+[1] Oct Sep Oct Sep Oct Oct
 Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
 &gt; levels(mf)
@@ -146,14 +262,22 @@ Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 &gt; nlevels(mf)
 
 [1] 12</code></pre>
-<p><strong>Important:</strong> The previous call to the <code>factor()</code> function will <strong>only work</strong> if your regional time configuration is English. If you are working with a non-English regional time configuration, you should change the level names in the argument <code>levels</code> to the language that you are using.</p>
-<p>Now, we can build a contingency table of the level occurrences of a factor using the function <code>table()</code>.</p>
+<p><strong>Important:</strong> The previous call to the
+<code>factor()</code> function will <strong>only work</strong> if your
+regional time configuration is English. If you are working with a
+non-English regional time configuration, you should change the level
+names in the argument <code>levels</code> to the language that you are
+using.</p>
+<p>Now, we can build a contingency table of the level occurrences of a
+factor using the function <code>table()</code>.</p>
 <pre><code>&gt; table(mf)
 
 mf
  Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov  Dec 
-1013  861  888  914  743  676    0    0  650  975  815  581 </code></pre>
-<p>We can see, there is no data for the months of July and August. We can remove levels of a factor for which there is no data with the function <code>droplevels()</code>.</p>
+1012  860  872  905  739  672    0    0  648  980  812  579 </code></pre>
+<p>We can see, there is no data for the months of July and August. We
+can remove levels of a factor for which there is no data with the
+function <code>droplevels()</code>.</p>
 <pre><code>&gt; mf &lt;- droplevels(mf)
 &gt; levels(mf)
 
@@ -163,28 +287,54 @@ mf
 
 mf
  Jan  Feb  Mar  Apr  May  Jun  Sep  Oct  Nov  Dec 
-1013  861  888  914  743  676  650  975  815  581 </code></pre>
-<p>One of the common uses of a factor is to aggregate numerical values by the levels of that factor. For instance, in our previous data, the column <code>positiu</code> contains the number of positively tested individuals, but each value in that column corresponds to the number per week, region, sex, age group and socioeconomical index. Let’s say we want to aggregate those positively tested individuals per month in the <code>data.frame</code> object <code>dat2yr2324</code>. We can use the function <code>aggregate()</code> for that purpose, as follows:</p>
+1012  860  872  905  739  672  648  980  812  579 </code></pre>
+<p>One of the common uses of a factor is to aggregate numerical values
+by the levels of that factor. For instance, in our previous data, the
+column <code>positiu</code> contains the number of positively tested
+individuals, but each value in that column corresponds to the number per
+week, region, sex, age group and socioeconomical index. Let’s say we
+want to aggregate those positively tested individuals per month in the
+<code>data.frame</code> object <code>dat2yr2324</code>. We can use the
+function <code>aggregate()</code> for that purpose, as follows:</p>
 <pre><code>&gt; posbymonth &lt;- aggregate(dat2yr2324$positiu, list(month=mf), sum)</code></pre>
-<p>Here the first argument is the vector (column of <code>dat2yr2324</code> in this case) with numerical values that we want to aggregate, the second argument is a <code>list</code> object with one element for each factor whose levels we want to use to group the values, and the third argument is the function we want to use to summarize the data per group. The result is a <code>data.frame</code> object with one column per factor and a final column called <code>x</code> with the aggregate values:</p>
+<p>Here the first argument is the vector (column of
+<code>dat2yr2324</code> in this case) with numerical values that we want
+to aggregate, the second argument is a <code>list</code> object with one
+element for each factor whose levels we want to use to group the values,
+and the third argument is the function we want to use to summarize the
+data per group. The result is a <code>data.frame</code> object with one
+column per factor and a final column called <code>x</code> with the
+aggregate values:</p>
 <pre><code>&gt; posbymonth
 
-   month    x
-1    Jan 1006
-2    Feb  725
-3    Mar  764
-4    Apr  701
-5    May  571
-6    Jun  559
-7    Sep  501
-8    Oct  789
-9    Nov  784
-10   Dec  550</code></pre>
-<p>We can visualize these data in a <a href="https://en.wikipedia.org/wiki/Scatter_plot">scatter plot</a> by converting the factor into an integer, and plotting the month into the x-axis and the numerical value into the y-axis:</p>
+   month   x
+1    Jan 992
+2    Feb 721
+3    Mar 752
+4    Apr 690
+5    May 560
+6    Jun 554
+7    Sep 495
+8    Oct 778
+9    Nov 770
+10   Dec 543</code></pre>
+<p>We can visualize these data in a <a
+href="https://en.wikipedia.org/wiki/Scatter_plot">scatter plot</a> by
+converting the factor into an integer, and plotting the month into the
+x-axis and the numerical value into the y-axis:</p>
 <pre><code>&gt; plot(as.integer(posbymonth$month), posbymonth$x, type=&quot;b&quot;)</code></pre>
 <p><img src="posbymonth-1.png" /></p>
-<p><strong>Exercise:</strong> look up in the help page of the <code>plot()</code> function, how can you change the labels for the <code>x</code> and <code>y</code> axes to a readable label whose meaning stands alone and minimally describes the data visualized in that axis. The resulting plot should be identical to the one above, but with the axes labels changed.</p>
-<p><strong>Exercise:</strong> Repeat the same plot, but instead of aggregating the number of positive cases, aggregate the positive rate by first calculating it using the columns <code>total</code> and <code>positiu</code>, and then using the <code>mean()</code> function to aggregate the values. Can you interpret the resulting plot?</p>
+<p><strong>Exercise:</strong> look up in the help page of the
+<code>plot()</code> function, how can you change the labels for the
+<code>x</code> and <code>y</code> axes to a readable label whose meaning
+stands alone and minimally describes the data visualized in that axis.
+The resulting plot should be identical to the one above, but with the
+axes labels changed.</p>
+<p><strong>Exercise:</strong> Repeat the same plot, but instead of
+aggregating the number of positive cases, aggregate the positive rate by
+first calculating it using the columns <code>total</code> and
+<code>positiu</code>, and then using the <code>mean()</code> function to
+aggregate the values. Can you interpret the resulting plot?</p>
 <!--
 dat2yr2324$posRate <- dat2yr2324$positiu / dat2yr2324$total *100
 posRateByMonth <- aggregate(dat2yr2324$posRate, list(month=mf), mean)
@@ -198,9 +348,22 @@ pct <- 100 * pbym$x / tbym$x
 
 use this more numerically stable approach to suggest the plot below
 -->
-<p><strong>Exercise:</strong> Aggregate again the positive rate as in the previous exercise, but this time by two factors, month and age group (look up in the <code>data.frame</code> object <code>dat2yr2324</code> which column may store the age group). Assuming the result of the function <code>aggregate()</code> is stored into a <code>data.frame</code> object called <code>posrbymonthage</code>, plot the aggregated positive rate as function of the month using the following plotting instruction:</p>
+<p><strong>Exercise:</strong> Aggregate again the positive rate as in
+the previous exercise, but this time by two factors, month and age group
+(look up in the <code>data.frame</code> object <code>dat2yr2324</code>
+which column may store the age group). Assuming the result of the
+function <code>aggregate()</code> is stored into a
+<code>data.frame</code> object called <code>posrbymonthage</code>, plot
+the aggregated positive rate as function of the month using the
+following plotting instruction:</p>
 <pre><code>&gt; plot(posrbymonthage$x ~ posrbymontage$month, xlab=&quot;Month&quot;, ylab=&quot;Positive rate&quot;)</code></pre>
-<p>The resulting plot contains so-called <a href="https://en.wikipedia.org/wiki/Box_plot">box plots</a> for each month, which allow one to visualize the location and spread of the data in terms of <a href="https://en.wikipedia.org/wiki/Quartile">quartiles</a>. How would you interpret the different sizes of the boxes throughout the months of the year?</p>
+<p>The resulting plot contains so-called <a
+href="https://en.wikipedia.org/wiki/Box_plot">box plots</a> for each
+month, which allow one to visualize the location and spread of the data
+in terms of <a
+href="https://en.wikipedia.org/wiki/Quartile">quartiles</a>. How would
+you interpret the different sizes of the boxes throughout the months of
+the year?</p>
 <!--
 dat2yr2324$month <- month=mf
 posrbymonthage <- aggregate(x = dat2yr2324$posRate,by = list(month=mf, edat= dat2yr2324$grup_edat) , mean)

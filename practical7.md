@@ -1,14 +1,12 @@
-Objectives
-==========
+# Objectives
 
 The learning objectives for this practical are:
 
--   Writing R scripts.
--   How to manipulate dates in data.
--   How to create and use factor objects.
+- Writing R scripts.
+- How to manipulate dates in data.
+- How to create and use factor objects.
 
-Setup and background
-====================
+# Setup and background
 
 To do this practical you need an installation of R and RStudio. You can
 find the instructions in the [setup](/setup#r-and-rstudio) link on how
@@ -21,10 +19,14 @@ We will use the data files called `mostres_analitzades.csv` and
 `virus_detectats.csv` that were generated in the [first
 practical](/practical1/). If you don’t have these files, please review
 that practical and generate them again. Once you have obtained those two
-files, copy them into a fresh new directory called `practical7`.
+files, copy them into a fresh new directory called `practical7`. The
+values obtained below have been obtained with the following specific
+versions (Feb 9, 2026) of these files:
 
-Writing R scripts
-=================
+- [mostres\_analitzades.csv](mostres_analitzades.csv).
+- [virus\_detectats.csv](virus_detectats.csv).
+
+# Writing R scripts
 
 We may often use an interactive R session to quickly examine data or
 make some straightforward calculations. In such an interactive session,
@@ -105,7 +107,7 @@ where the value in the column `sexe` is `No disponible`. You have to
 figure out the code that replaces the questions marks `??????` below.
 
     > mask <- ??????
-    > dat2 <- dat[mask, ]
+    + dat2 <- dat[mask, ]
 
 Once you subset data, it is always convenient to compare the dimensions
 of the original and resulting object, using the function `dim()`, and
@@ -114,8 +116,7 @@ should always lead to a smaller object in some dimension), and whether
 the number of rows in this case matches the number of `TRUE` values in
 the logical mask.
 
-Date-data management
-====================
+# Date-data management
 
 These data have two columns called `data_inici` and `data_final` that
 corresponding to the begining and end of the 7-day period of the data of
@@ -175,7 +176,7 @@ dates such as calculating time differences:
 
         > max(startdate)
 
-        [1] "2024-10-14"
+        [1] "2026-01-26"
 
 3.  Subsetting data for a period of time. For instance, let’s subset the
     data, selecting rows corresponding to the last academic year from
@@ -184,12 +185,12 @@ dates such as calculating time differences:
         > mask <- startdate >= as.Date("2023-09-01") & enddate <= as.Date("2024-06-30")
         > sum(mask)
 
-        [1] 8116
+        [1] 8079
 
         > dat2yr2324 <- dat2[mask, ]
         > dim(dat2yr2324)
 
-        [1] 8116   13
+        [1] 8079   13
 
     Note that the number of `TRUE` values in the logical mask matches
     the resulting number of rows in the subsetted object `dat2yr2324`.
@@ -202,7 +203,7 @@ and see how do we get the months from those dates:
     > m <- months(startdate, abbreviate=TRUE)
     > head(m)
 
-    [1] "Oct" "Sep" "Nov" "May" "Oct" "Sep"
+    [1] "Oct" "Sep" "Oct" "Sep" "Oct" "Oct"
 
     > class(m)
 
@@ -229,8 +230,7 @@ and then type again:
 
 Verify that now the vector `m` has the month names in English.
 
-Factors
-=======
+# Factors
 
 [Factors](https://funcompbio.github.io/lecture6/#26) in R are a class of
 objects that serve the purpose of storing what is known in statistics as
@@ -256,7 +256,7 @@ vector `m` of character strings to a factor.
     > mf <- factor(m)
     > head(mf)
 
-    [1] Oct Sep Nov May Oct Sep
+    [1] Oct Sep Oct Sep Oct Oct
     Levels: Apr Dec Feb Jan Jun Mar May Nov Oct Sep
 
 We can see that R displays factors differently to character strings, by
@@ -287,7 +287,7 @@ chronologically ordered. We can do that as follows:
     +                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
     > head(mf)
 
-    [1] Oct Sep Nov May Oct Sep
+    [1] Oct Sep Oct Sep Oct Oct
     Levels: Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 
     > levels(mf)
@@ -311,7 +311,7 @@ factor using the function `table()`.
 
     mf
      Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov  Dec 
-    1013  861  888  914  743  676    0    0  650  975  815  581 
+    1012  860  872  905  739  672    0    0  648  980  812  579 
 
 We can see, there is no data for the months of July and August. We can
 remove levels of a factor for which there is no data with the function
@@ -326,7 +326,7 @@ remove levels of a factor for which there is no data with the function
 
     mf
      Jan  Feb  Mar  Apr  May  Jun  Sep  Oct  Nov  Dec 
-    1013  861  888  914  743  676  650  975  815  581 
+    1012  860  872  905  739  672  648  980  812  579 
 
 One of the common uses of a factor is to aggregate numerical values by
 the levels of that factor. For instance, in our previous data, the
@@ -349,17 +349,17 @@ function we want to use to summarize the data per group. The result is a
 
     > posbymonth
 
-       month    x
-    1    Jan 1006
-    2    Feb  725
-    3    Mar  764
-    4    Apr  701
-    5    May  571
-    6    Jun  559
-    7    Sep  501
-    8    Oct  789
-    9    Nov  784
-    10   Dec  550
+       month   x
+    1    Jan 992
+    2    Feb 721
+    3    Mar 752
+    4    Apr 690
+    5    May 560
+    6    Jun 554
+    7    Sep 495
+    8    Oct 778
+    9    Nov 770
+    10   Dec 543
 
 We can visualize these data in a [scatter
 plot](https://en.wikipedia.org/wiki/Scatter_plot) by converting the

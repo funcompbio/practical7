@@ -32,7 +32,12 @@ We will use the data files called `mostres_analitzades.csv` and
 `virus_detectats.csv` that were generated in the
 [first practical](/practical1/). If you don't have these files, please review
 that practical and generate them again. Once you have obtained those two files,
-copy them into a fresh new directory called `practical7`.
+copy them into a fresh new directory called `practical7`. The values obtained
+below have been obtained with the following specific versions (Feb 9, 2026) of
+these files:
+
+  * [mostres_analitzades.csv](mostres_analitzades.csv).
+  * [virus_detectats.csv](virus_detectats.csv).
 
 # Writing R scripts
 
