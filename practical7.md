@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Practical 7
-lastupdate: October 28th, 2024
+lastupdate: February 9th, 2026
 permalink: /practical7/
 use_math : true
 ---
