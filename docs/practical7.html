@@ -99,7 +99,7 @@ excludes rows where the value in the column <code>sexe</code> is
 <code>No disponible</code>. You have to figure out the code that
 replaces the questions marks <code>??????</code> below.</p>
 <pre><code>&gt; mask &lt;- ??????
-+ dat2 &lt;- dat[mask, ]</code></pre>
+  dat2 &lt;- dat[mask, ]</code></pre>
 <p>Once you subset data, it is always convenient to compare the
 dimensions of the original and resulting object, using the function
 <code>dim()</code>, and think whether the difference in dimensions makes
@@ -249,7 +249,7 @@ case of the previous factor <code>mf</code>, where we would like for
 instance to have the levels corresponding to the months of the year and
 chronologically ordered. We can do that as follows:</p>
 <pre><code>&gt; mf &lt;- factor(m, levels=c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;,
-+                          &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;))
+                           &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;))
 &gt; head(mf)
 
 [1] Oct Sep Oct Sep Oct Oct

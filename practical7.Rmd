@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.path = "",
                       comment="", 
                       prompt=TRUE)
+options(continue="  ")
 Sys.setlocale("LC_TIME", "C")
 ```
 

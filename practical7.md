@@ -107,7 +107,7 @@ where the value in the column `sexe` is `No disponible`. You have to
 figure out the code that replaces the questions marks `??????` below.
 
     > mask <- ??????
-    + dat2 <- dat[mask, ]
+      dat2 <- dat[mask, ]
 
 Once you subset data, it is always convenient to compare the dimensions
 of the original and resulting object, using the function `dim()`, and
@@ -284,7 +284,7 @@ have the levels corresponding to the months of the year and
 chronologically ordered. We can do that as follows:
 
     > mf <- factor(m, levels=c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    +                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+                               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
     > head(mf)
 
     [1] Oct Sep Oct Sep Oct Oct
