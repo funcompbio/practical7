@@ -404,7 +404,8 @@ a `data.frame` object called `posrbymonthage`, plot the aggregated
 positive rate as function of the month using the following plotting
 instruction:
 
-    > plot(posrbymonthage$x ~ posrbymontage$month, xlab="Month", ylab="Positive rate")
+    > plot(posrbymonthage$x ~ posrbymonthage$month,
+           xlab="Month", ylab="Positive rate")
 
 The resulting plot contains so-called [box
 plots](https://en.wikipedia.org/wiki/Box_plot) for each month, which
